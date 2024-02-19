@@ -45,7 +45,14 @@ int Request_Get_Floor(Request request);
 /**
  * @brief Request_Get_Direction function, used to get the direction of a request.
  * @param request, the request.
- * @return int, the direction of the request.
+ * @return bool, the direction of the request 1 is up, 0 is down.
 */
 
 bool Request_Get_Direction(Request request);
+
+/**
+ * @brief Request_Is_Getting_Off function, used to check if someone is getting off at the current floor.
+ * @param request, the request.
+ * @return bool, 1 if someone is getting off, 0 if not.
+*/
+bool Request_Is_Getting_Off(Request request);

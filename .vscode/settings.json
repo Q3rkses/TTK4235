@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "elevio.h": "c"
+        "elevio.h": "c",
+        "assert.h": "c",
+        "buttonhandler.h": "c"
     }
 }
