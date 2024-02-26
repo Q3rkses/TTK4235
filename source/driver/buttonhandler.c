@@ -40,9 +40,9 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler){
 }
 
 void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor){
-    elevio_ButtonLamp(floor, type, 1);
+    elevio_buttonLamp(floor, type, 1);
 }
 
 void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor){
-    elevio_ButtonLamp(floor, type, 0);
+    elevio_buttonLamp(floor, type, 0);
 }
