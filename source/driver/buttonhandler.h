@@ -5,7 +5,8 @@
 
 #pragma once
 #include <stdbool.h>
-#include <elevio.h>
+#include <stdio.h>
+#include "elevio.h"
 
 /**
  * @brief This enum is used to define the different types of buttons
@@ -24,7 +25,7 @@ typedef struct Elevatorpanel{
  * @brief Function that initializes the elevator panel, will be used to keep track of which buttons have been pressed.
  * @return bool
 */
-Elevatorpanel_init(Elevatorpanel panel);
+void Elevatorpanel_init(Elevatorpanel panel);
 
 /**
  * @brief This function returns the StopButton state

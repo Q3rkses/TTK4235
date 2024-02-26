@@ -1,6 +1,6 @@
 #include "buttonhandler.h"
 
-Elevatorpanel_init(Elevatorpanel panel){
+void Elevatorpanel_init(Elevatorpanel panel){
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 4; j++){
             panel.PanelButtonState[i][j] = 0;
@@ -10,7 +10,7 @@ Elevatorpanel_init(Elevatorpanel panel){
 }
 
 bool Get_Stop_Button_State(Buttonhandler buttonhandler){
-    if (elevio_stopButton == 0){
+    if (elevio_stopButton() == 0){
         buttonhandler.StopBtnState = false;
     }
     else{
@@ -21,15 +21,15 @@ bool Get_Stop_Button_State(Buttonhandler buttonhandler){
 }
 
 void Turn_On_Stop_Button_Lamp(){
-    elevio_setStopLamp(1);
+    elevio_stopLamp(1);
 }
 
 void Turn_Off_Stop_Button_Lamp(){
-    elevio_setStopLamp(0);
+    elevio_stopLamp(0);
 }
 
 bool Get_Obstruction_Button_State(Buttonhandler buttonhandler){
-    if (elevio_obstruction == 0){
+    if (elevio_obstruction() == 0){
         buttonhandler.ObstructionBtnState = false;
     }
     else{
@@ -40,9 +40,9 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler){
 }
 
 void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor){
-    elevio_setButtonLamp(floor, type, 1);
+    elevio_ButtonLamp(floor, type, 1);
 }
 
 void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor){
-    elevio_setButtonLamp(floor, type, 0);
+    elevio_ButtonLamp(floor, type, 0);
 }
