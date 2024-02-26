@@ -17,6 +17,7 @@ int main(){
     Elevatorpanel panel;
 
     elevio_init();
+    Elevatorpanel_init(panel);
     
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
@@ -42,7 +43,7 @@ int main(){
                 int btnPressed = elevio_callButton(f, b);
 
                 if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", f, b);
+                    printf("Button pressed: %d, %d\n", b, f);
                 }
                 
                 /** TESTING IF MATRIX WORKS AS INTENTED*/
