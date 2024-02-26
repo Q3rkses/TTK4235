@@ -16,6 +16,16 @@ typedef struct Buttonhandler{
     bool ObstructionBtnState;
 }Buttonhandler;
 
+typedef struct Elevatorpanel{
+    int PanelButtonState[3][4];
+}Elevatorpanel;
+
+/**
+ * @brief Function that initializes the elevator panel, will be used to keep track of which buttons have been pressed.
+ * @return bool
+*/
+Elevatorpanel_init(Elevatorpanel panel);
+
 /**
  * @brief This function returns the StopButton state
  * @return bool
@@ -27,7 +37,14 @@ bool Get_Stop_Button_State(Buttonhandler buttonhandler);
  * @brief This function turns on the StopButton lamp
  * @return void
 */
-void Turn_On_Stop_Button_Lamp(Buttonhandler buttonhandler);
+void Turn_On_Stop_Button_Lamp();
+
+/**
+ * @brief This function turns on the StopButton lamp
+ * @return void
+*/
+void Turn_Off_Stop_Button_Lamp();
+
 
 /**
  * @brief This function returns the ObstructionButton state
