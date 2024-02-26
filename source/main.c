@@ -30,24 +30,36 @@ int main(){
        
         /** The Elevator position given by sensor*/
         int floor = elevio_floorSensor();
+        int direction = DIRN_UP;
 
         /**Elevator Light position*/
-        if(floor = 0){
+        if(floor == 0){
+            int direction = DIRN_UP;
+
             elevio_floorIndicator(0);
-        } else if(floor = 1){
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 1){
             elevio_floorIndicator(1);
-        } else if(floor = 2){
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 2){
             elevio_floorIndicator(2);
-        } else if(floor = 3){
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 3){
+            int direction = DIRN_DOWN;
+
             elevio_floorIndicator(3);
-        }
-
-        if(floor == 1){
-            elevio_motorDirection(DIRN_UP);
-        }
-
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
         }
 
 
@@ -82,11 +94,6 @@ int main(){
             elevio_motorDirection(DIRN_STOP);
             buttonhandler.StopBtnState = true;
             Turn_On_Stop_Button_Lamp();
-
-            while (elevio_stopButton()){
-                nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            }
-
             break;
 
         /** Sleep for 1 second after button released then continue*/
