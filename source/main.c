@@ -68,6 +68,8 @@ int main(){
             buttonhandler.StopBtnState = true;
             Turn_On_Stop_Button_Lamp();
 
+            break;
+
         /** Sleep for 1 second after button released then continue*/
         } else {
             nanosleep(&(struct timespec){0, 1000000000}, NULL);
