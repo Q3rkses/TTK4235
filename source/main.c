@@ -30,63 +30,25 @@ int main(){
        
         /** The Elevator position given by sensor*/
         int floor = elevio_floorSensor();
-        int direction = DIRN_UP;
+        int direction;
 
-        /**Elevator Light position*/
+        /**Elevator Light position (works mostly)*/
         if(floor == 0){
-            int direction = DIRN_UP;
-
             elevio_floorIndicator(0);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            elevio_motorDirection(direction);
 
         } else if(floor == 1){
             elevio_floorIndicator(1);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            elevio_motorDirection(direction);
 
         } else if(floor == 2){
             elevio_floorIndicator(2);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            elevio_motorDirection(direction);
+
 
         } else if(floor == 3){
-            int direction = DIRN_DOWN;
-
             elevio_floorIndicator(3);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            elevio_motorDirection(direction);
         }
 
 
-        /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-
-                if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", b, f);
-                }
-                
-                /** TESTING IF MATRIX WORKS AS INTENTED*/
-                if (btnPressed == 1 && panel.PanelButtonState[b][f] == 0){
-                    panel.PanelButtonState[b][f] = 1;
-                } else if (btnPressed == 1 && panel.PanelButtonState[b][f] == 1){
-                    panel.PanelButtonState[b][f] = 0;
-                }
-        /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
-                if (panel.PanelButtonState[b][f] == 1){
-                    Turn_On_Elevator_Button_Lamp(b, f);
-                } else {
-                    Turn_Off_Elevator_Button_Lamp(b, f);
-                }
-            }
-        }
-        
+        Update_Button_Press(panel);
 
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
