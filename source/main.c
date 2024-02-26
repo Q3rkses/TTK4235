@@ -17,6 +17,7 @@ int main(){
     Elevatorpanel panel;
 
     elevio_init();
+    Elevatorpanel_init(panel);
     
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
@@ -24,10 +25,24 @@ int main(){
     elevio_motorDirection(DIRN_UP);
 
     while(1){
-        /** Elevator position*/
+
+        /**------------------------- FLOOR INDICATOR -------------------------*/
+       
+        /** The Elevator position given by sensor*/
         int floor = elevio_floorSensor();
 
-        if(floor == 0){
+        /**Elevator Light position*/
+        if(floor = 0){
+            elevio_floorIndicator(0);
+        } else if(floor = 1){
+            elevio_floorIndicator(1);
+        } else if(floor = 2){
+            elevio_floorIndicator(2);
+        } else if(floor = 3){
+            elevio_floorIndicator(3);
+        }
+
+        if(floor == 1){
             elevio_motorDirection(DIRN_UP);
         }
 
@@ -42,7 +57,7 @@ int main(){
                 int btnPressed = elevio_callButton(f, b);
 
                 if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", f, b);
+                    printf("Button pressed: %d, %d\n", b, f);
                 }
                 
                 /** TESTING IF MATRIX WORKS AS INTENTED*/
@@ -68,11 +83,14 @@ int main(){
             buttonhandler.StopBtnState = true;
             Turn_On_Stop_Button_Lamp();
 
+            while (elevio_stopButton()){
+                nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            }
+
             break;
 
         /** Sleep for 1 second after button released then continue*/
-        } else {
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+        } else{
             buttonhandler.StopBtnState = false;
             Turn_Off_Stop_Button_Lamp();
 
@@ -87,8 +105,6 @@ int main(){
         } else {
             /**implement continue further requests here*/
             buttonhandler.ObstructionBtnState = false;
-            elevio_motorDirection(DIRN_UP);
-            
         }
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
