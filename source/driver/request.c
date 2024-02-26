@@ -1,7 +1,7 @@
 #include "request.h"
 #include <stdbool.h>
 
-Request Request_init(int floor, bool direction, bool off){
+Request Request_Init(int floor, bool direction, bool off){
     Request req;
     req.floor = floor;
     req.direction = direction;

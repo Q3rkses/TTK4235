@@ -32,7 +32,7 @@ typedef struct {
  * @param off, True if someone is getting off at current floor.
 */
 
-Request Request_init(int floor, bool direction, bool off);
+Request Request_Init(int floor, bool direction, bool off);
 
 /**
  * @brief Request_Get_Floor function, used to get the desired floor of a request.
