@@ -20,5 +20,5 @@ bool Request_Get_Direction(Request request){
 };
 
 bool Request_Is_Getting_Off(Request request){ 
-    return request.direction;
+    return request.off;
 };

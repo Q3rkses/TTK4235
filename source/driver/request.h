@@ -12,11 +12,13 @@
  * @param floor, the floor of the request.
  * @param direction, True if up, false if down.
  * @param off, True if someone is getting off at current floor.
+ * @param pNextRequest, next request in queue
 */
 typedef struct {
     int floor;
     bool direction;
     bool off;
+    Request *pNextRequest;
 } Request;
 
 
