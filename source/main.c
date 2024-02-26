@@ -40,6 +40,10 @@ int main(){
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
+
+                if (elevio_callButton(f, b)){
+                    printf("Button pressed: %d, %d\n", f, b);
+                }
                 
                 /** TESTING IF MATRIX WORKS AS INTENTED*/
                 if (btnPressed == 1 && panel.PanelButtonState[b][f] == 0){
@@ -47,9 +51,16 @@ int main(){
                 } else if (btnPressed == 1 && panel.PanelButtonState[b][f] == 1){
                     panel.PanelButtonState[b][f] = 0;
                 }
-
+        /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
+                if (panel.PanelButtonState[b][f] == 1){
+                    Turn_On_Elevator_Button_Lamp(b, f);
+                } else {
+                    Turn_Off_Elevator_Button_Lamp(b, f);
+                }
             }
         }
+        
+
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){
@@ -64,7 +75,7 @@ int main(){
             Turn_Off_Stop_Button_Lamp();
 
             /**implement continue here*/
-            elevio_motorDirection(DIRN_DOWN);
+        
         }
         
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
