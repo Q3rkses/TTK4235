@@ -13,15 +13,15 @@
 
 
 int main(){
+    
+    printf("------------------------- ELEVATOR START -------------------------\n");
+    printf("Press the stop button on the elevator panel to exit\n");
+
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
 
     elevio_init();
     Elevatorpanel_init(panel);
-    
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
-
     elevio_motorDirection(DIRN_UP);
 
     while(1){
@@ -52,16 +52,21 @@ int main(){
             int mDirection = DIRN_DOWN;
         }
 
+
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
+        Update_Button_Press(panel);
+
+        /** DEBUGGING
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 int mBtnPressed = elevio_callButton(f, b);
 
+
                 if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", b, f);
+                    printf("Button pressed: %d, %d\n", f, );
                 }
                 
-                /** TESTING IF MATRIX WORKS AS INTENTED*/
+
                 if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 0){
                     panel.PanelButtonState[b][f] = 1;
                     printf("Button press registered as 1: %d, %d\n", b, f);
@@ -70,10 +75,11 @@ int main(){
                     panel.PanelButtonState[b][f] = 0;
                     printf("Button press registered as 0: %d, %d\n", b, f);
                 }
-        /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
-                Update_Button_Press(panel);
             }
         }
+        
+        */
+
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){

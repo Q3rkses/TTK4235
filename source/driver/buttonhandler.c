@@ -6,7 +6,7 @@ void Elevatorpanel_init(Elevatorpanel panel){
             panel.PanelButtonState[i][j] = 0;
         }
     }
-    printf("Elevator panel initialized\n");
+    printf("------------------------- Elevator panel initialized -------------------------\n");
 }
 
 bool Get_Stop_Button_State(Buttonhandler buttonhandler){
@@ -39,33 +39,31 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler){
     return buttonhandler.ObstructionBtnState;
 }
 
-void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor){
+void Turn_On_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 1);
 }
 
-void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor){
+void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
 void Update_Button_Press(Elevatorpanel panel){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-
-                if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", b, f);
-                }
+    for(int f = 0; f < N_FLOORS; f++){
+        for(int b = 0; b < N_BUTTONS; b++){
+            int btnPressed = elevio_callButton(f, b);
+            
+    /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
+            if (btnPressed == 1 && panel.PanelButtonState[f][b] == 0){
+                panel.PanelButtonState[f][b] = 1;
+                Turn_On_Elevator_Button_Lamp(f, b);
+                printf("Button press registered as 1: %d, %d\n", f, b);
                 
-        /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
-                if (btnPressed == 1 && panel.PanelButtonState[b][f] == 0){
-                    panel.PanelButtonState[b][f] = 1;
-                    Turn_On_Elevator_Button_Lamp(b, f);
-                    
-                } else if (btnPressed == 1 && panel.PanelButtonState[b][f] == 1){
-                    panel.PanelButtonState[b][f] = 0;
-                    Turn_Off_Elevator_Button_Lamp(b, f);
-                }
+            } else if (btnPressed == 1 && panel.PanelButtonState[f][b] == 1){
+                panel.PanelButtonState[f][b] = 0;
+                Turn_Off_Elevator_Button_Lamp(f, b);
+                printf("Button press registered as 0: %d, %d\n", f, b);
             }
         }
+    }
 }
