@@ -58,14 +58,14 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler);
  * @brief This function turns on the ElevatorButton lamp
  * @return void
 */
-void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor);
+void Turn_On_Elevator_Button_Lamp(int floor, ButtonType type);
 
 
 /**
  * @brief This function turns off the ElevatorButton lamp
  * @return void
 */
-void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor);
+void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
 
 
 /**
