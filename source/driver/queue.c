@@ -5,6 +5,8 @@ Queue Queue_Init(void){
     Queue queue;
     Request initializerReq = Request_Init(1, DIRN_STOP, false); // think about if off will delete the req
     queue.head = &initializerReq;
+    initializerReq.pNextRequest = NULL;
+    initializerReq.pPrevRequest = NULL;
     queue.numberOfNodes = 1;
 
     printf("Queue initialized\n");
@@ -21,11 +23,11 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
         printf("Won't attach Request because it already exists in Queue.\n");
         return;
     }
-    Request* pRequest = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
+    Request* pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
     if (attachBefore) {
-        Attach_Before_Request(pRequest, &request, &queue);
+        Attach_Before_This(pThis, &request, &queue);
     } else {
-        Attach_After_Request(pRequest, &request, &queue);
+        Attach_After_This(pThis, &request, &queue);
     }
 }
 
@@ -38,7 +40,6 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
     return false;
 }
 
-// Not finished
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore){
     /*int volatile *currentFloor = elevio_floorSensor(); // ? Can you constantly detect and change currentFloor? */
     MotorDirection elevatorDirn;
@@ -102,54 +103,50 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
     }
 }
 
-void Attach_Before_Request(Request *request, Request *requestToAttach, Queue *queue){
-    if (request == NULL) {
-        printf("Cannot attach before NULL!\n");
+void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
+    if (this == queue->head) {
+        printf("Cannot attach before queue->head!\n");
         return;
     }
-    
+    Request *temp = this->pPrevRequest->pNextRequest;
+    requestToAttach->pPrevRequest = this->pPrevRequest;
+    this->pPrevRequest = requestToAttach;
+    requestToAttach->pNextRequest = this;
+    temp = requestToAttach;
     (queue->numberOfNodes)++;
 }
 
-void Attach_After_Request(Request *request, Request *requestToAttach, Queue *queue){
-    if (request == NULL) {
+void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
+    if (this == NULL) {
         printf("Cannot attach after NULL!\n");
         return;
     }
-    requestToAttach->pNextRequest = request->pNextRequest;
-    request->pNextRequest = requestToAttach;
-    requestToAttach->pPrevRequest = request;
+    Request *temp = this->pNextRequest->pPrevRequest;
+    requestToAttach->pNextRequest = this->pNextRequest;
+    this->pNextRequest = requestToAttach;
+    requestToAttach->pPrevRequest = this;
+    temp = requestToAttach;
     (queue->numberOfNodes)++;
 }
 
-// It is enough to detach the request. The memory will be freed automatically since request is not dynamically allocated.
-void Delete_From_Queue(Request *request, Queue *queue){ // remember to FREE deleted node and its nextPointer
+void Delete_From_Queue(Request *request, Queue *queue){
     if (queue->head == NULL || queue->numberOfNodes == 0) {
         printf("There are no elements in Queue. Cannot apply Delete_From_Queue().");
     }
     bool foundRequest = false;
-    if (queue->head->floor == request->floor && queue->head->direction == request->direction) {
-        Request *temp = queue->head;
-        queue->head = queue->head->pNextRequest;
-        queue->head->pNextRequest = NULL;
-        free(temp);
-        foundRequest = true;
-    }
-
-    for (Request *iteratorNode = queue->head; iteratorNode->pNextRequest != NULL; iteratorNode = iteratorNode->pNextRequest) {
-        if (iteratorNode->pNextRequest->floor == request->floor && iteratorNode->pNextRequest->direction == request->direction) {
-            iteratorNode->pNextRequest = iteratorNode->pNextRequest->pNextRequest;
-            foundRequest = true;
-            break;
-        }
-    }
     for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-        if (iteratorNode->pNextRequest != NULL && iteratorNode->floor == request->floor && iteratorNode->direction == request->direction) {
+        if (iteratorNode->floor == request->floor && iteratorNode->direction == request->direction) {
             Request *temp = iteratorNode;
-            iteratorNode->pNextRequest = iteratorNode->pNextRequest->pNextRequest;
-            iteratorNode->pNextRequest->pPrevRequest = iteratorNode->pPrevRequest;
-            temp->pNextRequest = NULL;
-            temp->pPrevRequest = NULL;
+            if (iteratorNode->pNextRequest != NULL) {
+                Request *tempNext = iteratorNode->pNextRequest;
+                iteratorNode->pPrevRequest->pNextRequest = iteratorNode->pNextRequest;
+                tempNext = NULL;
+            }
+            if (iteratorNode->pPrevRequest != NULL) {
+                Request *tempPrev = iteratorNode->pPrevRequest;
+                iteratorNode->pNextRequest->pPrevRequest = iteratorNode->pPrevRequest;
+                tempPrev = NULL;
+            }
             free(temp);
             foundRequest = true;
             break;
@@ -157,7 +154,7 @@ void Delete_From_Queue(Request *request, Queue *queue){ // remember to FREE dele
     }
     if (foundRequest) {
         (queue->numberOfNodes)--;
-        printf("Request detached.\n");
+        printf("Request deleted.\n");
     } else {
         printf("Request not in queue. Therefore cannot delete request!\n");
     }

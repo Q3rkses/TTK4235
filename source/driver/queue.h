@@ -31,8 +31,8 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
 */
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore);
 
-void Attach_Before_Request(Request *request, Request *requestToAttach, Queue *queue);
+void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue);
 
-void Attach_After_Request(Request *request, Request *requestToAttach, Queue *queue);
+void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
