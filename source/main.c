@@ -25,9 +25,11 @@ int main(){
     elevio_motorDirection(DIRN_UP);
     
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
+    
     while(elevio_floorSensor() != 0){
         elevio_motorDirection(DIRN_DOWN);
     } elevio_motorDirection(DIRN_STOP);
+
     printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
     while(1){
@@ -36,7 +38,8 @@ int main(){
        
         /** The Elevator position given by sensor*/
         int mCurrentFloor = elevio_floorSensor();
-        int mDirection;
+        int mDirection = DIRN_STOP;
+        int mTemp = 0;
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){
@@ -60,7 +63,7 @@ int main(){
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        Update_Button_Press(panel);
+        mTemp = Update_Button_Press(panel, mTemp);
 
         /** DEBUGGING
         for(int f = 0; f < N_FLOORS; f++){

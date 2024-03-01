@@ -22,7 +22,7 @@ typedef struct Buttonhandler{
 */
 
 typedef struct Elevatorpanel{
-    int PanelButtonState[4][3];
+    int PanelButtonState[N_FLOORS][3];
 }Elevatorpanel;
 
 /**
@@ -76,4 +76,4 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
  * @brief Checks for buttons presses on the elevator panel, and updates the panel state.
  * @return void
 */
-void Update_Button_Press(Elevatorpanel panel);
+int Update_Button_Press(Elevatorpanel panel, int temp);
