@@ -1,9 +1,10 @@
 #include "buttonhandler.h"
 
 void Elevatorpanel_init(Elevatorpanel panel){
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 4; j++){
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 3; j++){
             panel.PanelButtonState[i][j] = 0;
+            Turn_Off_Elevator_Button_Lamp(i, j);
         }
     }
     printf("------------------------- Elevator panel initialized -------------------------\n");
@@ -57,12 +58,12 @@ void Update_Button_Press(Elevatorpanel panel){
             if (btnPressed == 1 && panel.PanelButtonState[f][b] == 0){
                 panel.PanelButtonState[f][b] = 1;
                 Turn_On_Elevator_Button_Lamp(f, b);
-                printf("Button press registered as 1: %d, %d\n", f, b);
+                printf(" Setting light %d, %d to high \n", f, b);
                 
             } else if (btnPressed == 1 && panel.PanelButtonState[f][b] == 1){
                 panel.PanelButtonState[f][b] = 0;
                 Turn_Off_Elevator_Button_Lamp(f, b);
-                printf("Button press registered as 0: %d, %d\n", f, b);
+                printf(" Setting light %d, %d to low \n", f, b);
             }
         }
     }

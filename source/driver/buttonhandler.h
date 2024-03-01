@@ -9,13 +9,17 @@
 #include "elevio.h"
 
 /**
- * @brief This enum is used to define the different types of buttons
+ * @brief This class is used to define the different types of buttons
 */
 
 typedef struct Buttonhandler{
     bool StopBtnState;
     bool ObstructionBtnState;
 }Buttonhandler;
+
+/**
+ * @brief This class is used to define the button matrix of the elevatorpanel interface
+*/
 
 typedef struct Elevatorpanel{
     int PanelButtonState[4][3];
