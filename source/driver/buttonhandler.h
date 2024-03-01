@@ -18,7 +18,7 @@ typedef struct Buttonhandler{
 }Buttonhandler;
 
 typedef struct Elevatorpanel{
-    int PanelButtonState[3][4];
+    int PanelButtonState[4][3];
 }Elevatorpanel;
 
 /**
