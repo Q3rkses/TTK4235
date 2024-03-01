@@ -56,7 +56,7 @@ int Update_Button_Press(Elevatorpanel *panel, int temp){
             
     /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
             if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 0 && temp != f+b){
+                if (panel->PanelButtonState[f][b] == 0 && temp != (f+b)){
                         Turn_On_Elevator_Button_Lamp(f, b);
                         panel->PanelButtonState[f][b] = 1;
                         printf(" Setting light %d, %d to high \n", f, b);
@@ -65,7 +65,7 @@ int Update_Button_Press(Elevatorpanel *panel, int temp){
                 } 
 
             if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 1 && temp != f+b){
+                if (panel->PanelButtonState[f][b] == 1 && temp != (f+b)){
                     Turn_Off_Elevator_Button_Lamp(f, b);
                     panel->PanelButtonState[f][b] = 0;
                     printf(" Setting light %d, %d to low \n", f, b);
