@@ -64,8 +64,11 @@ int main(){
                 /** TESTING IF MATRIX WORKS AS INTENTED*/
                 if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 0){
                     panel.PanelButtonState[b][f] = 1;
+                    printf("Button press registered as 1: %d, %d\n", b, f);
+                    
                 } else if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 1){
                     panel.PanelButtonState[b][f] = 0;
+                    printf("Button press registered as 0: %d, %d\n", b, f);
                 }
         /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
                 Update_Button_Press(panel);
