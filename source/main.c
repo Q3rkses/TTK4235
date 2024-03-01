@@ -21,7 +21,7 @@ int main(){
     Elevatorpanel panel;
 
     elevio_init();
-    Elevatorpanel_init(panel);
+    Elevatorpanel_init(&panel);
     elevio_motorDirection(DIRN_UP);
     
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
