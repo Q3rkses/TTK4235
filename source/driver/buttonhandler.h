@@ -29,7 +29,7 @@ typedef struct Elevatorpanel{
  * @brief Function that initializes the elevator panel, will be used to keep track of which buttons have been pressed.
  * @return bool
 */
-void Elevatorpanel_init(Elevatorpanel panel);
+void Elevatorpanel_init(Elevatorpanel *panel);
 
 /**
  * @brief This function returns the StopButton state
