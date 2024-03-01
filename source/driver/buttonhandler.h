@@ -66,3 +66,10 @@ void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor);
  * @return void
 */
 void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor);
+
+
+/**
+ * @brief Updates button presses
+ * @return void
+*/
+void Update_Button_Press(Elevatorpanel panel);
