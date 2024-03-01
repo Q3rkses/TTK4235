@@ -61,17 +61,18 @@ int Update_Button_Press(Elevatorpanel *panel, int temp){
                         panel->PanelButtonState[f][b] = 1;
                         printf(" Setting light %d, %d to high \n", f, b);
                         return (f+b);
+                    }
+                } 
 
-                if (btnPressed == 1){
-                    if (panel->PanelButtonState[f][b] == 1 && temp == f+b){
-                        Turn_Off_Elevator_Button_Lamp(f, b);
-                        panel->PanelButtonState[f][b] = 0;
-                        printf(" Setting light %d, %d to low \n", f, b);
-                
-                        return (f+b);
+            if (btnPressed == 1){
+                if (panel->PanelButtonState[f][b] == 1 && temp == f+b){
+                    Turn_Off_Elevator_Button_Lamp(f, b);
+                    panel->PanelButtonState[f][b] = 0;
+                    printf(" Setting light %d, %d to low \n", f, b);
+            
+                    return (f+b);
                     }
                 }
             }
         }
     }
-}
