@@ -23,6 +23,12 @@ int main(){
     elevio_init();
     Elevatorpanel_init(panel);
     elevio_motorDirection(DIRN_UP);
+    
+    printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
+    while(elevio_floorSensor() != 0){
+        elevio_motorDirection(DIRN_DOWN);
+    } elevio_motorDirection(DIRN_STOP);
+    printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
     while(1){
 
