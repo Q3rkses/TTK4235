@@ -76,4 +76,4 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
  * @brief Checks for buttons presses on the elevator panel, and updates the panel state.
  * @return void
 */
-int Update_Button_Press(Elevatorpanel panel, int temp);
+int Update_Button_Press(Elevatorpanel *panel, int temp);

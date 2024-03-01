@@ -43,7 +43,7 @@ int main(){
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){
-            int mDirection = DIRN_UP;
+            int mDirection = DIRN_STOP;
             elevio_floorIndicator(0);
             elevio_motorDirection(mDirection);
 
@@ -63,7 +63,7 @@ int main(){
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        mTemp = Update_Button_Press(panel, mTemp);
+        mTemp = Update_Button_Press(&panel, mTemp);
 
         /** DEBUGGING
         for(int f = 0; f < N_FLOORS; f++){
