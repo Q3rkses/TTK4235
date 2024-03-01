@@ -10,12 +10,15 @@
 /**
  * @brief Request class, used to store information about a request.
  * @param floor, the floor of the request.
- * @param direction, True if up, false if down.
+ * @param direction, DIRN_UP if upward request, DIRN_DOWN if downward request, 0 or DIRN_STOP if a cabin request
  * @param off, True if someone is getting off at current floor.
+ * @param pNextRequest, next request in queue
 */
 typedef struct {
+    Request *pNextRequest;
+    Request *pPrevRequest;
     int floor;
-    bool direction;
+    MotorDirection direction;
     bool off;
 } Request;
 
@@ -32,7 +35,7 @@ typedef struct {
  * @param off, True if someone is getting off at current floor.
 */
 
-Request Request_init(int floor, bool direction, bool off);
+Request Request_Init(int floor, MotorDirection direction, bool off);
 
 /**
  * @brief Request_Get_Floor function, used to get the desired floor of a request.
@@ -48,7 +51,7 @@ int Request_Get_Floor(Request request);
  * @return bool, the direction of the request 1 is up, 0 is down.
 */
 
-bool Request_Get_Direction(Request request);
+MotorDirection Request_Get_Direction(Request request);
 
 /**
  * @brief Request_Is_Getting_Off function, used to check if someone is getting off at the current floor.
