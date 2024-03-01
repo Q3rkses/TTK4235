@@ -5,17 +5,19 @@
 #include "driver/elevio.h"
 
 /**importing our own libraries*/
-#include <door.h>
-#include <queue.h>
-#include <request.h>
-#include <buttonhandler.h>
+#include "driver/door.h"
+#include "driver/queue.h"
+#include "driver/request.h"
+#include "driver/buttonhandler.h"
 
 
 
 int main(){
     Buttonhandler buttonhandler;
+    Elevatorpanel panel;
 
     elevio_init();
+    Elevatorpanel_init(panel);
     
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
@@ -23,44 +25,93 @@ int main(){
     elevio_motorDirection(DIRN_UP);
 
     while(1){
+
+        /**------------------------- FLOOR INDICATOR -------------------------*/
+       
+        /** The Elevator position given by sensor*/
         int floor = elevio_floorSensor();
+        int direction = DIRN_UP;
 
+        /**Elevator Light position*/
         if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
+            int direction = DIRN_UP;
+
+            elevio_floorIndicator(0);
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 1){
+            elevio_floorIndicator(1);
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 2){
+            elevio_floorIndicator(2);
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
+
+        } else if(floor == 3){
+            int direction = DIRN_DOWN;
+
+            elevio_floorIndicator(3);
+            elevio_motorDirection(DIRN_STOP);
+            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+            elevio_motorDirection(direction);
         }
 
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }
 
-
-        /**checks all the buttons on the panel*/
+        /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
-                elevio_buttonLamp(f, b, btnPressed);
+
+                if (elevio_callButton(f, b)){
+                    printf("Button pressed: %d, %d\n", b, f);
+                }
+                
+                /** TESTING IF MATRIX WORKS AS INTENTED*/
+                if (btnPressed == 1 && panel.PanelButtonState[b][f] == 0){
+                    panel.PanelButtonState[b][f] = 1;
+                } else if (btnPressed == 1 && panel.PanelButtonState[b][f] == 1){
+                    panel.PanelButtonState[b][f] = 0;
+                }
+        /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
+                if (panel.PanelButtonState[b][f] == 1){
+                    Turn_On_Elevator_Button_Lamp(b, f);
+                } else {
+                    Turn_Off_Elevator_Button_Lamp(b, f);
+                }
             }
         }
+        
 
-        /**STOP BUTTON FUNCTIONALITY*/
+
+        /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){
             elevio_motorDirection(DIRN_STOP);
-            elevio_stopLamp(1);
+            buttonhandler.StopBtnState = true;
+            Turn_On_Stop_Button_Lamp();
+            break;
 
         /** Sleep for 1 second after button released then continue*/
-        } else {
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
+        } else{
+            buttonhandler.StopBtnState = false;
+            Turn_Off_Stop_Button_Lamp();
 
-            elevio_stopLamp(0);
             /**implement continue here*/
-            elevio_motorDirection(DIRN_DOWN);
+        
         }
         
+        /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_obstruction()){
             elevio_motorDirection(DIRN_STOP);
+            buttonhandler.ObstructionBtnState = true;
         } else {
             /**implement continue further requests here*/
-            elevio_motorDirection(DIRN_UP);
+            buttonhandler.ObstructionBtnState = false;
         }
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
