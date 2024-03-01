@@ -1,7 +1,7 @@
 #include "request.h"
 #include <stdbool.h>
 
-Request Request_Init(int floor, bool direction, bool off){
+Request Request_Init(int floor, MotorDirection direction, bool off){
     Request req;
     req.floor = floor;
     req.direction = direction;
@@ -15,7 +15,7 @@ int Request_Get_Floor(Request request){
     return request.floor;
 };
 
-bool Request_Get_Direction(Request request){ 
+MotorDirection Request_Get_Direction(Request request){ 
     return request.direction;
 };
 

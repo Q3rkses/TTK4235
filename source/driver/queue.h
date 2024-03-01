@@ -21,10 +21,18 @@ typedef struct {
 
 Queue Queue_Init(void);
 
-void Attach_Request_To_Queue(Request *request, Queue *queue);
+void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor);
 
-int After_Which_Request_To_Attach_Request(Request *request, Queue *queue);
+bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
 
-void Attach_After_PrevRequest(Request *prevRequest, Request *requestToAttach, Queue *queue);
+/** 
+ * @brief Where_To_Attach_Request function
+ * @return pPrevRequest to indicate to assert the request after pPrevRequest in Queue
+*/
+Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore);
+
+void Attach_Before_Request(Request *request, Request *requestToAttach, Queue *queue);
+
+void Attach_After_Request(Request *request, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
