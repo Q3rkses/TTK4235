@@ -40,12 +40,19 @@ int main(){
             elevio_motorDirection(DIRN_STOP);
             nanosleep(&(struct timespec){0, 1000000000}, NULL);
             elevio_motorDirection(mDirection);
+        int floor = elevio_floorSensor();
+        int direction;
+
+        /**Elevator Light position (works mostly)*/
+        if(floor == 0){
+            elevio_floorIndicator(0);
 
         } else if(mCurrentFloor == 1){
             elevio_floorIndicator(1);
             elevio_motorDirection(DIRN_STOP);
             nanosleep(&(struct timespec){0, 1000000000}, NULL);
             elevio_motorDirection(mDirection);
+
 
         } else if(mCurrentFloor == 2){
             elevio_floorIndicator(2);
@@ -56,6 +63,7 @@ int main(){
         } else if(mCurrentFloor == 3){
             int mDirection = DIRN_DOWN;
 
+        } else if(floor == 3){
             elevio_floorIndicator(3);
             elevio_motorDirection(DIRN_STOP);
             nanosleep(&(struct timespec){0, 1000000000}, NULL);
@@ -86,7 +94,10 @@ int main(){
                 }
             }
         }
-        
+    }
+
+
+        Update_Button_Press(panel);
 
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
