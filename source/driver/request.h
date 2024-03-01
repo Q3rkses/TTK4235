@@ -15,8 +15,8 @@
  * @param pNextRequest, next request in queue
 */
 typedef struct Request{
-    Request *pNextRequest;
-    Request *pPrevRequest;
+    struct Request *pNextRequest;
+    struct Request *pPrevRequest;
     int floor;
     MotorDirection direction;
     bool off;
