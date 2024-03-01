@@ -48,7 +48,7 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
-int Update_Button_Press(Elevatorpanel panel, int temp){
+int Update_Button_Press(Elevatorpanel *panel, int temp){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
@@ -56,15 +56,15 @@ int Update_Button_Press(Elevatorpanel panel, int temp){
             
     /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
             if (btnPressed == 1){
-                if(panel.PanelButtonState[f][b] == 0 && temp != f+b){
+                if(panel->PanelButtonState[f][b] == 0 && temp != f+b){
                         Turn_On_Elevator_Button_Lamp(f, b);
-                        panel.PanelButtonState[f][b] = 1;
+                        panel->PanelButtonState[f][b] = 1;
                         printf(" Setting light %d, %d to high \n", f, b);
                 
                 return f+b;
-                } else if (panel.PanelButtonState[f][b] == 1 && temp != f+b){
+                } else if (panel->PanelButtonState[f][b] == 1 && temp != f+b){
                     Turn_Off_Elevator_Button_Lamp(f, b);
-                    panel.PanelButtonState[f][b] = 0;
+                    panel->PanelButtonState[f][b] = 0;
                     printf(" Setting light %d, %d to low \n", f, b);
                 
                     return f+b;
