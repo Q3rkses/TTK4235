@@ -35,10 +35,11 @@ int main(){
     Request req3 = Request_Init(4,DIRN_DOWN,false);
     Request req4 = Request_Init(2,DIRN_DOWN,false);
 
-    Attach_After_This((&mQueue)->head, &req1, &mQueue);
+    Queue_Print(&mQueue);
+    /*Attach_After_This((&mQueue)->head, &req1, &mQueue);
     Queue_Print(&mQueue);
     Delete_From_Queue(&req1, &mQueue);
-    Queue_Print(&mQueue);
+    Queue_Print(&mQueue);*/
     /*--------------------------------------------------------------------*/
 
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
