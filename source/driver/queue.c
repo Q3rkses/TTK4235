@@ -12,21 +12,21 @@ Queue Queue_Init(Request *head, Request *tail){
     head->pPrevRequest = NULL;
     tail->pNextRequest = NULL;
     tail->pPrevRequest = (&queue)->head;
-    
+
     queue.numberOfNodes = 2;
 
-    printf("Queue initialized\n");
+    printf("Queue initialized\n\n");
     return queue;
 }
 
 void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
-        printf("Cannot attach Request because the Queue has %d elements.\n", queue->numberOfNodes);
+        printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
         return;
     }
     if (Request_Already_Exists_In_Queue(&request, &queue)) {
-        printf("Won't attach Request because it already exists in Queue.\n");
+        printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
     Request* pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
@@ -111,28 +111,21 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
 
 void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
     if (this == queue->head) {
-        printf("Cannot attach before queue->head!\n");
+        printf("Cannot attach before queue->head!\n\n");
         return;
     }
-    Request *temp = this->pPrevRequest->pNextRequest;
+    this->pPrevRequest->pNextRequest = requestToAttach;
     requestToAttach->pPrevRequest = this->pPrevRequest;
     this->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this;
-    temp = requestToAttach;
     (queue->numberOfNodes)++;
 }
 
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
     if (this == NULL) {
-        printf("Cannot attach after NULL!\n");
+        printf("Cannot attach after NULL!\n\n");
         return;
     }
-    /*Request *temp = this->pNextRequest->pPrevRequest;
-    requestToAttach->pNextRequest = this->pNextRequest;
-    this->pNextRequest = requestToAttach;
-    requestToAttach->pPrevRequest = this;
-    temp = requestToAttach;
-    (queue->numberOfNodes)++;*/
     this->pNextRequest->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this->pNextRequest;
     this->pNextRequest = requestToAttach;
@@ -164,9 +157,9 @@ void Delete_From_Queue(Request *request, Queue *queue){
     }
     if (foundRequest) {
         (queue->numberOfNodes)--;
-        printf("Request deleted.\n");
+        printf("Request deleted.\n\n");
     } else {
-        printf("Request not in queue. Therefore cannot delete request!\n");
+        printf("Request not in queue. Therefore cannot delete request!\n\n");
     }
 }
 
@@ -176,5 +169,5 @@ void Queue_Print(Queue *pQueue){
         printf("%d. request:\nFloor: %d\nDirection: %d\nOff: %d\nNext node adress: %d\nPrev node adress: %d\n\n", counter, i->floor, i->direction, i->off, i->pNextRequest, i->pPrevRequest);
         counter++;
     }
-    printf("There are %d request(s) in Queue\n", pQueue->numberOfNodes);
+    printf("There are %d request(s) in Queue\n\n", pQueue->numberOfNodes);
 }
