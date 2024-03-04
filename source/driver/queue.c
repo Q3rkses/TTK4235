@@ -119,6 +119,7 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
     this->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this;
     (queue->numberOfNodes)++;
+    printf("Attached node adress %d to Queue before node adress %d\n\n", requestToAttach, this);
 }
 
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
@@ -131,6 +132,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
     this->pNextRequest = requestToAttach;
     requestToAttach->pPrevRequest = this;
     (queue->numberOfNodes)++;
+    printf("Attached node adress %d to Queue after node adress %d\n\n", requestToAttach, this);
 }
 
 void Delete_From_Queue(Request *request, Queue *queue){
