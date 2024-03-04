@@ -72,7 +72,7 @@ int main(){
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        Update_Button_Press(&panel, &mButtonType, &mFloor);
+        Update_Button_Press(&panel, &mFloor, &mButtonType);
 
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
