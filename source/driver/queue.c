@@ -123,8 +123,8 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
 }
 
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
-    if (this == NULL) {
-        printf("Cannot attach after NULL!\n\n");
+    if (this == queue->tail) {
+        printf("Cannot attach after queue->tail!\n\n");
         return;
     }
     this->pNextRequest->pPrevRequest = requestToAttach;
