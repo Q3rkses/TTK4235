@@ -163,7 +163,7 @@ void Delete_From_Queue(Request *request, Queue *queue){
 
 void Queue_Print(Queue *pQueue){
     for (Request *i = pQueue->head; i != NULL; i = i->pNextRequest) {
-        printf("%d. node:\n%d", i, i->floor);
+        printf("%d. request:\nFloor: %d\nDirection: %d\nOff?: %d\nNext node adress: %d\nPrev node adress: %d\n\n", i, i->floor, i->direction, i->off, i->pNextRequest, i->pPrevRequest);
     }
-    printf("There are %d", pQueue->numberOfNodes);
+    printf("There are %d request(s) in Queue", pQueue->numberOfNodes);
 }
