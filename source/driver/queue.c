@@ -12,21 +12,21 @@ Queue Queue_Init(Request *head, Request *tail){
     head->pPrevRequest = NULL;
     tail->pNextRequest = NULL;
     tail->pPrevRequest = (&queue)->head;
-    
+
     queue.numberOfNodes = 2;
 
-    printf("Queue initialized\n");
+    printf("Queue initialized\n\n");
     return queue;
 }
 
 void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
-        printf("Cannot attach Request because the Queue has %d elements.\n", queue->numberOfNodes);
+        printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
         return;
     }
     if (Request_Already_Exists_In_Queue(&request, &queue)) {
-        printf("Won't attach Request because it already exists in Queue.\n");
+        printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
     Request* pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
@@ -114,11 +114,10 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
         printf("Cannot attach before queue->head!\n");
         return;
     }
-    Request *temp = this->pPrevRequest->pNextRequest;
+    this->pPrevRequest->pNextRequest = requestToAttach;
     requestToAttach->pPrevRequest = this->pPrevRequest;
     this->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this;
-    temp = requestToAttach;
     (queue->numberOfNodes)++;
 }
 
@@ -127,12 +126,6 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
         printf("Cannot attach after NULL!\n");
         return;
     }
-    /*Request *temp = this->pNextRequest->pPrevRequest;
-    requestToAttach->pNextRequest = this->pNextRequest;
-    this->pNextRequest = requestToAttach;
-    requestToAttach->pPrevRequest = this;
-    temp = requestToAttach;
-    (queue->numberOfNodes)++;*/
     this->pNextRequest->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this->pNextRequest;
     this->pNextRequest = requestToAttach;
