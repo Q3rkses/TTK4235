@@ -42,13 +42,13 @@ bool Get_Stop_Button_State(Buttonhandler buttonhandler);
  * @brief This function turns on the StopButton lamp
  * @return void
 */
-void Turn_On_Stop_Button_Lamp();
+void Turn_On_Stop_Button_Lamp(void);
 
 /**
  * @brief This function turns on the StopButton lamp
  * @return void
 */
-void Turn_Off_Stop_Button_Lamp();
+void Turn_Off_Stop_Button_Lamp(void);
 
 
 /**
@@ -76,4 +76,5 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
  * @brief Checks for buttons presses on the elevator panel, and updates the panel state.
  * @return void
 */
-int Update_Button_Press(Elevatorpanel *panel, int temp);
+
+void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);

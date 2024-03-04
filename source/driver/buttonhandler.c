@@ -11,21 +11,21 @@ void Elevatorpanel_init(Elevatorpanel *panel){
 }
 
 bool Get_Stop_Button_State(Buttonhandler buttonhandler){
-    if (elevio_stopButton() == 0){
-        buttonhandler.StopBtnState = false;
+    if (elevio_stopButton() == 1){
+        buttonhandler.StopBtnState = true;
     }
     else{
-        buttonhandler.StopBtnState = true;
+        buttonhandler.StopBtnState = false;
     }
 
     return buttonhandler.StopBtnState;
 }
 
-void Turn_On_Stop_Button_Lamp(){
+void Turn_On_Stop_Button_Lamp(void){
     elevio_stopLamp(1);
 }
 
-void Turn_Off_Stop_Button_Lamp(){
+void Turn_Off_Stop_Button_Lamp(void){
     elevio_stopLamp(0);
 }
 
@@ -48,7 +48,7 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
-int Update_Button_Press(Elevatorpanel *panel, int temp){
+void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
@@ -56,21 +56,26 @@ int Update_Button_Press(Elevatorpanel *panel, int temp){
             
     /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
             if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 0 && temp != (f+b)){
+                if (panel->PanelButtonState[f][b] == 0 && b != *btntype && f != *floor){
                         Turn_On_Elevator_Button_Lamp(f, b);
                         panel->PanelButtonState[f][b] = 1;
                         printf(" Setting light %d, %d to high \n", f, b);
-                        return (f+b);
+
+                        /**RETURNS*/
+                        *btntype = b;
+                        *floor = f;
                     }
                 } 
 
             if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 1 && temp != (f+b)){
+                if (panel->PanelButtonState[f][b] == 1 && b != *btntype && f != *floor){
                     Turn_Off_Elevator_Button_Lamp(f, b);
                     panel->PanelButtonState[f][b] = 0;
                     printf(" Setting light %d, %d to low \n", f, b);
-            
-                    return (f+b);
+
+                    /**RETURNS*/
+                    *btntype = b;
+                    *floor = f;
                     }
                 }
             }

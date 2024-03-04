@@ -19,16 +19,27 @@ int main(){
 
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
+    
+    ButtonType mButtonType = -1;
+    int mFloor = -1;
+    int mDirection = DIRN_STOP;
 
     elevio_init();
     Elevatorpanel_init(&panel);
-    elevio_motorDirection(DIRN_UP);
     
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
     
+    for (int x = 0; x < 2; x++){
+        printf("...");
+    }
+
     while(elevio_floorSensor() != 0){
         elevio_motorDirection(DIRN_DOWN);
     } elevio_motorDirection(DIRN_STOP);
+
+    for (int x = 0; x < 2; x++){
+        printf("...");
+    }
 
     printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
@@ -38,8 +49,6 @@ int main(){
        
         /** The Elevator position given by sensor*/
         int mCurrentFloor = elevio_floorSensor();
-        int mDirection = DIRN_STOP;
-        int mTemp = 0;
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){
@@ -63,31 +72,7 @@ int main(){
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        mTemp = Update_Button_Press(&panel, mTemp);
-
-        /** DEBUGGING
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int mBtnPressed = elevio_callButton(f, b);
-
-
-                if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", f, );
-                }
-                
-
-                if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 0){
-                    panel.PanelButtonState[b][f] = 1;
-                    printf("Button press registered as 1: %d, %d\n", b, f);
-                    
-                } else if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 1){
-                    panel.PanelButtonState[b][f] = 0;
-                    printf("Button press registered as 0: %d, %d\n", b, f);
-                }
-            }
-        }
-        
-        */
+        Update_Button_Press(&panel, &mButtonType, &mFloor);
 
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
