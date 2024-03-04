@@ -160,3 +160,9 @@ void Delete_From_Queue(Request *request, Queue *queue){
         printf("Request not in queue. Therefore cannot delete request!\n");
     }
 }
+
+void Queue_Print(Queue queue){
+    for (Request *i = queue->head; i != NULL; i = i->pNextRequest) {
+        printf("%d. node:\n", i);
+    }
+}
