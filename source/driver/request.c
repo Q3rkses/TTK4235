@@ -7,7 +7,7 @@ Request Request_Init(int floor, MotorDirection direction, bool off){
     req.direction = direction;
     req.off = off;
 
-    printf("Request initialized with floor: %d, direction: %d, off: %d\n", req.floor, req.direction, req.off);
+    printf("Request initialized with floor: %d, direction: %d, off: %d\n\n", req.floor, req.direction, req.off);
     return req;
 };
 
