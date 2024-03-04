@@ -5,7 +5,7 @@
 
 #pragma once
 #include "request.h"
-#define MAX_QUEUE_NODE_AMOUNT 10
+#define MAX_QUEUE_NODE_AMOUNT 12
 
 /**
  * @brief Queue class, used to keep the request in order.
@@ -14,8 +14,9 @@
 */
 // Queue can max have 10 nodes
 // Queue is 0 indexed
-typedef struct {
+typedef struct Queue {
     Request *head;
+    Request *tail;
     int numberOfNodes;
 } Queue;
 

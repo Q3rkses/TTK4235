@@ -4,11 +4,15 @@
 
 Queue Queue_Init(void){
     Queue queue;
-    Request initializerReq = Request_Init(1, DIRN_STOP, false); // think about if off will delete the req
-    queue.head = &initializerReq;
-    initializerReq.pNextRequest = NULL;
-    initializerReq.pPrevRequest = NULL;
-    queue.numberOfNodes = 1;
+    Request head = Request_Init(-1, DIRN_STOP, false); // think about if off will delete the req
+    Request tail = Request_Init(-1, DIRN_DOWN, false);
+    queue.head = &head;
+    queue.tail = &tail;
+    head.pNextRequest = (&queue)->tail;
+    head.pPrevRequest = NULL;
+    tail.pNextRequest = NULL;
+    tail.pPrevRequest = (&queue)->head;
+    queue.numberOfNodes = 2;
 
     printf("Queue initialized\n");
     return queue;
@@ -122,17 +126,22 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
         printf("Cannot attach after NULL!\n");
         return;
     }
-    Request *temp = this->pNextRequest->pPrevRequest;
+    /*Request *temp = this->pNextRequest->pPrevRequest;
     requestToAttach->pNextRequest = this->pNextRequest;
     this->pNextRequest = requestToAttach;
     requestToAttach->pPrevRequest = this;
     temp = requestToAttach;
+    (queue->numberOfNodes)++;*/
+    this->pNextRequest->pPrevRequest = requestToAttach;
+    requestToAttach->pNextRequest = this->pNextRequest;
+    this->pNextRequest = requestToAttach;
+    requestToAttach->pPrevRequest = this;
     (queue->numberOfNodes)++;
 }
 
 void Delete_From_Queue(Request *request, Queue *queue){
-    if (queue->head == NULL || queue->numberOfNodes == 0) {
-        printf("There are no elements in Queue. Cannot apply Delete_From_Queue().");
+    if (queue->head == NULL || queue->tail == NULL || queue->numberOfNodes < 2) {
+        printf("There are not enough elements in Queue. Cannot apply Delete_From_Queue().");
     }
     bool foundRequest = false;
     for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
@@ -148,7 +157,6 @@ void Delete_From_Queue(Request *request, Queue *queue){
                 iteratorNode->pNextRequest->pPrevRequest = iteratorNode->pPrevRequest;
                 tempPrev = NULL;
             }
-            free(temp);
             foundRequest = true;
             break;
         }
@@ -165,5 +173,5 @@ void Queue_Print(Queue *pQueue){
     for (Request *i = pQueue->head; i != NULL; i = i->pNextRequest) {
         printf("%d. request:\nFloor: %d\nDirection: %d\nOff?: %d\nNext node adress: %d\nPrev node adress: %d\n\n", i, i->floor, i->direction, i->off, i->pNextRequest, i->pPrevRequest);
     }
-    printf("There are %d request(s) in Queue", pQueue->numberOfNodes);
+    printf("There are %d request(s) in Queue\n", pQueue->numberOfNodes);
 }
