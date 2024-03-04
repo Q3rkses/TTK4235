@@ -30,7 +30,7 @@ int main(){
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
     
     for (int x = 0; x < 2; x++){
-        printf("...");
+        printf("...\n");
     }
 
     while(elevio_floorSensor() != 0){
@@ -38,7 +38,7 @@ int main(){
     } elevio_motorDirection(DIRN_STOP);
 
     for (int x = 0; x < 2; x++){
-        printf("...");
+        printf("...\n");
     }
 
     printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
