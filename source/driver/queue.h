@@ -36,3 +36,5 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue);
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
+
+void Queue_Print(Queue *pQueue);
