@@ -1,30 +1,31 @@
 #include "buttonhandler.h"
 
-void Elevatorpanel_init(Elevatorpanel panel){
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 4; j++){
-            panel.PanelButtonState[i][j] = 0;
+void Elevatorpanel_init(Elevatorpanel *panel){
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 3; j++){
+            panel->PanelButtonState[i][j] = 0;
+            Turn_Off_Elevator_Button_Lamp(i, j);
         }
     }
-    printf("Elevator panel initialized\n");
+    printf("------------------------- Elevator panel initialized -------------------------\n");
 }
 
 bool Get_Stop_Button_State(Buttonhandler buttonhandler){
-    if (elevio_stopButton() == 0){
-        buttonhandler.StopBtnState = false;
+    if (elevio_stopButton() == 1){
+        buttonhandler.StopBtnState = true;
     }
     else{
-        buttonhandler.StopBtnState = true;
+        buttonhandler.StopBtnState = false;
     }
 
     return buttonhandler.StopBtnState;
 }
 
-void Turn_On_Stop_Button_Lamp(){
+void Turn_On_Stop_Button_Lamp(void){
     elevio_stopLamp(1);
 }
 
-void Turn_Off_Stop_Button_Lamp(){
+void Turn_Off_Stop_Button_Lamp(void){
     elevio_stopLamp(0);
 }
 
@@ -39,33 +40,44 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler){
     return buttonhandler.ObstructionBtnState;
 }
 
-void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor){
+void Turn_On_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 1);
 }
 
-void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor){
+void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
-void Update_Button_Press(Elevatorpanel panel){
+void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
+    for(int f = 0; f < N_FLOORS; f++){
+        for(int b = 0; b < N_BUTTONS; b++){
+            int btnPressed = elevio_callButton(f, b);
+            
+    /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
+            if (btnPressed == 1){
+                if (panel->PanelButtonState[f][b] == 0 && b != *btntype && f != *floor){
+                        Turn_On_Elevator_Button_Lamp(f, b);
+                        panel->PanelButtonState[f][b] = 1;
+                        printf(" Setting light %d, %d to high \n", f, b);
 
-                if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", b, f);
-                }
-                
-        /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
-                if (btnPressed == 1 && panel.PanelButtonState[b][f] == 0){
-                    panel.PanelButtonState[b][f] = 1;
-                    Turn_On_Elevator_Button_Lamp(b, f);
-                    
-                } else if (btnPressed == 1 && panel.PanelButtonState[b][f] == 1){
-                    panel.PanelButtonState[b][f] = 0;
-                    Turn_Off_Elevator_Button_Lamp(b, f);
+                        /**RETURNS*/
+                        *btntype = b;
+                        *floor = f;
+                    }
+                } 
+
+            if (btnPressed == 1){
+                if (panel->PanelButtonState[f][b] == 1 && b != *btntype && f != *floor){
+                    Turn_Off_Elevator_Button_Lamp(f, b);
+                    panel->PanelButtonState[f][b] = 0;
+                    printf(" Setting light %d, %d to low \n", f, b);
+
+                    /**RETURNS*/
+                    *btntype = b;
+                    *floor = f;
+                    }
                 }
             }
         }
-}
+    }

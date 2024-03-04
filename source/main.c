@@ -13,16 +13,35 @@
 
 
 int main(){
-    Buttonhandler buttonhandler;
-    Elevatorpanel panel;
-
-    elevio_init();
-    Elevatorpanel_init(panel);
     
-    printf("=== Example Program ===\n");
+    printf("------------------------- ELEVATOR START -------------------------\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    elevio_motorDirection(DIRN_UP);
+    Buttonhandler buttonhandler;
+    Elevatorpanel panel;
+    
+    ButtonType mButtonType = -1;
+    int mFloor = -1;
+    int mDirection = DIRN_STOP;
+
+    elevio_init();
+    Elevatorpanel_init(&panel);
+    
+    printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
+    
+    for (int x = 0; x < 2; x++){
+        printf("...");
+    }
+
+    while(elevio_floorSensor() != 0){
+        elevio_motorDirection(DIRN_DOWN);
+    } elevio_motorDirection(DIRN_STOP);
+
+    for (int x = 0; x < 2; x++){
+        printf("...");
+    }
+
+    printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
     while(1){
 
@@ -30,74 +49,30 @@ int main(){
        
         /** The Elevator position given by sensor*/
         int mCurrentFloor = elevio_floorSensor();
-        int mDirection = DIRN_UP;
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){
-            int mDirection = DIRN_UP;
-
+            int mDirection = DIRN_STOP;
             elevio_floorIndicator(0);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
             elevio_motorDirection(mDirection);
-        int floor = elevio_floorSensor();
-        int direction;
-
-        /**Elevator Light position (works mostly)*/
-        if(floor == 0){
-            elevio_floorIndicator(0);
 
         } else if(mCurrentFloor == 1){
             elevio_floorIndicator(1);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
             elevio_motorDirection(mDirection);
 
 
         } else if(mCurrentFloor == 2){
             elevio_floorIndicator(2);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
             elevio_motorDirection(mDirection);
 
         } else if(mCurrentFloor == 3){
-            int mDirection = DIRN_DOWN;
-
-        } else if(floor == 3){
             elevio_floorIndicator(3);
-            elevio_motorDirection(DIRN_STOP);
-            nanosleep(&(struct timespec){0, 1000000000}, NULL);
-            elevio_motorDirection(mDirection);
+            int mDirection = DIRN_DOWN;
         }
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int mBtnPressed = elevio_callButton(f, b);
-
-                if (elevio_callButton(f, b)){
-                    printf("Button pressed: %d, %d\n", b, f);
-                }
-                
-                /** TESTING IF MATRIX WORKS AS INTENTED*/
-                if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 0){
-                    panel.PanelButtonState[b][f] = 1;
-                } else if (mBtnPressed == 1 && panel.PanelButtonState[b][f] == 1){
-                    panel.PanelButtonState[b][f] = 0;
-                }
-        /**------------------------- TURN LIGHTS ON AND OFF -------------------------*/
-                if (panel.PanelButtonState[b][f] == 1){
-                    Turn_On_Elevator_Button_Lamp(b, f);
-                } else {
-                    Turn_Off_Elevator_Button_Lamp(b, f);
-                }
-            }
-        }
-    }
-
-
-        Update_Button_Press(panel);
+        Update_Button_Press(&panel, &mButtonType, &mFloor);
 
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/

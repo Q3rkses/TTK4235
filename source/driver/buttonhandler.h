@@ -9,7 +9,7 @@
 #include "elevio.h"
 
 /**
- * @brief This enum is used to define the different types of buttons
+ * @brief This class is used to define the different types of buttons
 */
 
 typedef struct Buttonhandler{
@@ -17,15 +17,19 @@ typedef struct Buttonhandler{
     bool ObstructionBtnState;
 }Buttonhandler;
 
+/**
+ * @brief This class is used to define the button matrix of the elevatorpanel interface
+*/
+
 typedef struct Elevatorpanel{
-    int PanelButtonState[3][4];
+    int PanelButtonState[N_FLOORS][3];
 }Elevatorpanel;
 
 /**
  * @brief Function that initializes the elevator panel, will be used to keep track of which buttons have been pressed.
  * @return bool
 */
-void Elevatorpanel_init(Elevatorpanel panel);
+void Elevatorpanel_init(Elevatorpanel *panel);
 
 /**
  * @brief This function returns the StopButton state
@@ -38,13 +42,13 @@ bool Get_Stop_Button_State(Buttonhandler buttonhandler);
  * @brief This function turns on the StopButton lamp
  * @return void
 */
-void Turn_On_Stop_Button_Lamp();
+void Turn_On_Stop_Button_Lamp(void);
 
 /**
  * @brief This function turns on the StopButton lamp
  * @return void
 */
-void Turn_Off_Stop_Button_Lamp();
+void Turn_Off_Stop_Button_Lamp(void);
 
 
 /**
@@ -58,18 +62,19 @@ bool Get_Obstruction_Button_State(Buttonhandler buttonhandler);
  * @brief This function turns on the ElevatorButton lamp
  * @return void
 */
-void Turn_On_Elevator_Button_Lamp(ButtonType type, int floor);
+void Turn_On_Elevator_Button_Lamp(int floor, ButtonType type);
 
 
 /**
  * @brief This function turns off the ElevatorButton lamp
  * @return void
 */
-void Turn_Off_Elevator_Button_Lamp(ButtonType type, int floor);
+void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
 
 
 /**
- * @brief Updates button presses
+ * @brief Checks for buttons presses on the elevator panel, and updates the panel state.
  * @return void
 */
-void Update_Button_Press(Elevatorpanel panel);
+
+void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
