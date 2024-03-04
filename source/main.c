@@ -9,6 +9,8 @@
 #include "driver/queue.h"
 #include "driver/request.h"
 #include "driver/buttonhandler.h"
+#include "driver/request.h"
+#include "driver/queue.h"
 
 
 
@@ -26,25 +28,35 @@ int main(){
 
     elevio_init();
     Elevatorpanel_init(&panel);
-    
+    /*---------------------Testing Queue System---------------------------*/
+    Queue mQueue = Queue_Init();
+    Request req1 = Request_Init(4,DIRN_DOWN,false);
+    Request req2 = Request_Init(3,DIRN_STOP,false);
+    Request req3 = Request_Init(4,DIRN_DOWN,false);
+    Request req4 = Request_Init(2,DIRN_DOWN,false);
+
+    Attach_After_This((&mQueue)->head, &req1, &mQueue);
+    Queue_Print(&mQueue);
+    Delete_From_Queue(&req1, &mQueue);
+    Queue_Print(&mQueue);
+    /*--------------------------------------------------------------------*/
+
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
-    
-    for (int x = 0; x < 2; x++){
-        printf("...\n");
-    }
 
     while(elevio_floorSensor() != 0){
         elevio_motorDirection(DIRN_DOWN);
     } elevio_motorDirection(DIRN_STOP);
 
-    for (int x = 0; x < 2; x++){
+    for (int x = 0; x < 5; x++){
         printf("...\n");
     }
 
-    printf("------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
+    printf("\n------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
     while(1){
 
+        /*---------------------Testing Queue System---------------------------*/
+        
         /**------------------------- FLOOR INDICATOR -------------------------*/
        
         /** The Elevator position given by sensor*/
