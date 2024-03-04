@@ -2,16 +2,17 @@
 #include "queue.h"
 #include "request.h"
 
-Queue Queue_Init(void){
+Queue Queue_Init(Request *head, Request *tail){
     Queue queue;
-    Request head = Request_Init(-1, DIRN_STOP, false); // think about if off will delete the req
-    Request tail = Request_Init(-1, DIRN_DOWN, false);
-    queue.head = &head;
-    queue.tail = &tail;
-    head.pNextRequest = (&queue)->tail;
-    head.pPrevRequest = NULL;
-    tail.pNextRequest = NULL;
-    tail.pPrevRequest = (&queue)->head;
+    
+    queue.head = head;
+    queue.tail = tail;
+
+    head->pNextRequest = (&queue)->tail;
+    head->pPrevRequest = NULL;
+    tail->pNextRequest = NULL;
+    tail->pPrevRequest = (&queue)->head;
+    
     queue.numberOfNodes = 2;
 
     printf("Queue initialized\n");
@@ -170,8 +171,10 @@ void Delete_From_Queue(Request *request, Queue *queue){
 }
 
 void Queue_Print(Queue *pQueue){
+    int counter = 0;
     for (Request *i = pQueue->head; i != NULL; i = i->pNextRequest) {
-        printf("%d. request:\nFloor: %d\nDirection: %d\nOff?: %d\nNext node adress: %d\nPrev node adress: %d\n\n", i, i->floor, i->direction, i->off, i->pNextRequest, i->pPrevRequest);
+        printf("%d. request:\nFloor: %d\nDirection: %d\nOff: %d\nNext node adress: %d\nPrev node adress: %d\n\n", counter, i->floor, i->direction, i->off, i->pNextRequest, i->pPrevRequest);
+        counter++;
     }
     printf("There are %d request(s) in Queue\n", pQueue->numberOfNodes);
 }

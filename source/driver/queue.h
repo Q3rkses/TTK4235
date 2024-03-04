@@ -20,7 +20,7 @@ typedef struct Queue {
     int numberOfNodes;
 } Queue;
 
-Queue Queue_Init(void);
+Queue Queue_Init(Request *head, Request *tail);
 
 void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor);
 
