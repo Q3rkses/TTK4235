@@ -78,4 +78,4 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
  * @return void
 */
 
-Request Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
+Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);

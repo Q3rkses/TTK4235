@@ -48,9 +48,7 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
-Request Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
-    Request req;
-
+Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
@@ -67,8 +65,8 @@ Request Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntyp
                         *btntype = b;
                         *floor = f;
 
-                        req = Request_Init(f, b, false);
-                        return req;
+                        Request *pReq = (Request*)malloc(sizeof(Request));
+                        return pReq;
                     }
                 } 
 
