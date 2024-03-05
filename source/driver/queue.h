@@ -28,6 +28,7 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
 
 /** 
  * @brief Where_To_Attach_Request function
+ * @param attachBefore, attachBefore parameter is planned to be true
  * @return pPrevRequest to indicate to assert the request after pPrevRequest in Queue
 */
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore);

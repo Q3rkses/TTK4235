@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request* pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
+    Request *pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
     if (attachBefore) {
         Attach_Before_This(pThis, &request, &queue);
     } else {
@@ -57,7 +57,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
     switch (request->direction)
     {
     case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
-        for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
                 || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
@@ -73,7 +73,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         }
         break;
     case DIRN_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
-        for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
                 || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
@@ -89,7 +89,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         }
         break;
     case DIRN_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
-        for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
                 || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
