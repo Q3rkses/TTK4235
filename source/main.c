@@ -25,7 +25,6 @@ int main(){
     ButtonType mButtonType = -1;
     int mFloor = -1;
     int mDirection = DIRN_STOP;
-    bool mAttachBefore = true;
 
     elevio_init();
     Elevatorpanel_init(&panel);
@@ -58,13 +57,14 @@ int main(){
     printf("\n------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
     while(1){
+    
+        /** The Elevator position given by sensor*/
+        int mCurrentFloor = elevio_floorSensor();
 
         /*---------------------Testing Queue System---------------------------*/
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
        
-        /** The Elevator position given by sensor*/
-        int mCurrentFloor = elevio_floorSensor();
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){

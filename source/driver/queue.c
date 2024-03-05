@@ -47,7 +47,6 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
 }
 
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore){
-    /*int volatile *currentFloor = elevio_floorSensor(); // ? Can you constantly detect and change currentFloor? */
     MotorDirection elevatorDirn;
     if (request->floor - mCurrentFloor > 0) {
         elevatorDirn = DIRN_UP;
@@ -137,7 +136,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
 
 void Delete_From_Queue(Request *request, Queue *queue){
     if (queue->head == NULL || queue->tail == NULL || queue->numberOfNodes < 2) {
-        printf("There are not enough elements in Queue. Cannot apply Delete_From_Queue().\n\n");
+        printf("Cannot apply Delete_From_Queue().\n\n");
     }
     bool foundRequest = false;
     for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
@@ -153,6 +152,7 @@ void Delete_From_Queue(Request *request, Queue *queue){
                 iteratorNode->pNextRequest->pPrevRequest = iteratorNode->pPrevRequest;
                 tempPrev = NULL;
             }
+            free(temp); // I think this is correct
             foundRequest = true;
             break;
         }
@@ -162,6 +162,28 @@ void Delete_From_Queue(Request *request, Queue *queue){
         printf("Request deleted.\n\n");
     } else {
         printf("Request not in queue. Therefore cannot delete request!\n\n");
+    }
+}
+
+void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor){ // should this go on forever itself as well, because main is going forever
+    Request *iteratorNode = queue->head;
+    while (iteratorNode != NULL) {
+        if () {
+            Delete_From_Queue(iteratorNode, queue);
+        }
+        if (iteratorNode == queue->tail) {
+            iteratorNode = queue->head;
+        }
+        iteratorNode = iteratorNode->pNextRequest;
+    }
+}
+
+void Empty_Queue(Queue *queue){
+    for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+        if (iteratorNode->pPrevRequest == queue->head) {
+            continue;
+        }
+        Delete_From_Queue(iteratorNode->pPrevRequest, queue);
     }
 }
 
