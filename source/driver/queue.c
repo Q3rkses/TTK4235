@@ -25,15 +25,15 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
         return;
     }
-    if (Request_Already_Exists_In_Queue(&request, &queue)) {
+    if (Request_Already_Exists_In_Queue(request, queue)) {
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(&request, &queue, mCurrentFloor, &attachBefore);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore);
     if (attachBefore) {
-        Attach_Before_This(pThis, &request, &queue);
+        Attach_Before_This(pThis, request, queue);
     } else {
-        Attach_After_This(pThis, &request, &queue);
+        Attach_After_This(pThis, request, queue);
     }
 }
 
