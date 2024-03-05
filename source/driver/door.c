@@ -11,7 +11,3 @@ void Door_Close(Door door){
     door.isOpen = false;
     elevio_doorOpenLamp(0);
 }
-
-bool Get_Door_State(Door door){
-    return door.isOpen;
-}

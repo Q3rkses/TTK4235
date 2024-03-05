@@ -5,6 +5,7 @@
 
 #pragma once
 #include "request.h"
+#include "door.h"
 #define MAX_QUEUE_NODE_AMOUNT 12
 
 /**

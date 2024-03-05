@@ -24,9 +24,3 @@ void Door_Open(Door door);
  * @return Door
 */
 void Door_Close(Door door);
-
-/**
- * @brief This function returns the door state
- * @return bool
-*/
-bool Get_Door_State(Door door);
