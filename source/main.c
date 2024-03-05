@@ -21,16 +21,16 @@ int main(){
 
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
-
-    Request mHead = Request_Init(-1, DIRN_DOWN, false);
-    Request mTail = Request_Init(-1, DIRN_DOWN, false);
     
     ButtonType mButtonType = -1;
     int mFloor = -1;
     int mDirection = DIRN_STOP;
+    bool mAttachBefore = true;
 
     elevio_init();
     Elevatorpanel_init(&panel);
+    Request mHead = Request_Init(-1, DIRN_DOWN, false);
+    Request mTail = Request_Init(-1, DIRN_DOWN, false);
     /*---------------------Testing Queue System---------------------------*/
     Queue mQueue = Queue_Init(&mHead, &mTail);
     Request req1 = Request_Init(4,DIRN_DOWN,false);
