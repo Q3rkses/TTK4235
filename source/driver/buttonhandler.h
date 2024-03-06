@@ -12,18 +12,18 @@
  * @brief This class is used to define the different types of buttons
 */
 
-typedef struct Buttonhandler{
+typedef struct Buttonhandler {
     bool StopBtnState;
     bool ObstructionBtnState;
-}Buttonhandler;
+} Buttonhandler;
 
 /**
  * @brief This class is used to define the button matrix of the elevatorpanel interface
 */
 
-typedef struct Elevatorpanel{
+typedef struct Elevatorpanel {
     int PanelButtonState[N_FLOORS][3];
-}Elevatorpanel;
+} Elevatorpanel;
 
 /**
  * @brief Function that initializes the elevator panel, will be used to keep track of which buttons have been pressed.

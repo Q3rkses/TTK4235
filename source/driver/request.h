@@ -14,7 +14,7 @@
  * @param off, True if someone is getting off at current floor.
  * @param pNextRequest, next request in queue
 */
-typedef struct Request{
+typedef struct Request {
     struct Request *pNextRequest;
     struct Request *pPrevRequest;
     int floor;
