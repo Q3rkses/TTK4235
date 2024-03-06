@@ -48,7 +48,7 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type){
     elevio_buttonLamp(floor, type, 0);
 }
 
-void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
+Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
     /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
@@ -64,20 +64,25 @@ void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype){
                         /**RETURNS*/
                         *btntype = b;
                         *floor = f;
+
+                        Request *pReq = (Request*)malloc(sizeof(Request));
+                        return pReq;
                     }
                 } 
 
-            if (btnPressed == 1){
+            /** if (btnPressed == 1){
                 if (panel->PanelButtonState[f][b] == 1 && (5*b+f) != (*btntype*5 + *floor)){
                     Turn_Off_Elevator_Button_Lamp(f, b);
                     panel->PanelButtonState[f][b] = 0;
                     printf(" Setting light %d, %d to low \n", f, b);
 
-                    /**RETURNS*/
+                    /**RETURNS
                     *btntype = b;
                     *floor = f;
+
+                    Request req = Request_Init(f, b, false);
                     }
-                }
+                } */
             }
         }
     }

@@ -30,8 +30,9 @@ int main(){
     Elevatorpanel_init(&panel);
     Request mHead = Request_Init(-1, DIRN_DOWN, false);
     Request mTail = Request_Init(-1, DIRN_DOWN, false);
-    /*---------------------Testing Queue System---------------------------*/
     Queue mQueue = Queue_Init(&mHead, &mTail);
+
+    /*---------------------Testing Queue System---------------------------*/
     Request req1 = Request_Init(4,DIRN_DOWN,false);
     Request req2 = Request_Init(3,DIRN_STOP,false);
     Request req3 = Request_Init(4,DIRN_DOWN,false);
@@ -89,7 +90,6 @@ int main(){
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         Update_Button_Press(&panel, &mFloor, &mButtonType);
-
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){

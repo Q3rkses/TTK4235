@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "elevio.h"
+#include "request.h"
 
 /**
  * @brief This class is used to define the different types of buttons
@@ -77,4 +78,4 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
  * @return void
 */
 
-void Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
+Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
