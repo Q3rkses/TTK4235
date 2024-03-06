@@ -40,7 +40,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
 
-void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor);
+void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door);
 
 void Empty_Queue(Queue *queue);
 
