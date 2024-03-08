@@ -69,6 +69,10 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
                 *attachBefore = false;
                 return iteratorNode;
             }
+            if (iteratorNode->pNextRequest == NULL) {
+                *attachBefore = true;
+                return iteratorNode;
+            }
         }
         break;
     case DIRN_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
@@ -83,6 +87,10 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
             }
             if (iteratorNode->pPrevRequest == NULL) {
                 *attachBefore = false;
+                return iteratorNode;
+            }
+            if (iteratorNode->pNextRequest == NULL) {
+                *attachBefore = true;
                 return iteratorNode;
             }
         }
@@ -101,6 +109,10 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
                 *attachBefore = false;
                 return iteratorNode;
             }
+            if (iteratorNode->pNextRequest == NULL) {
+                *attachBefore = true;
+                return iteratorNode;
+            }
         }
         break;
     default:
@@ -114,6 +126,7 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
         free(requestToAttach);
         return;
     }
+
     this->pPrevRequest->pNextRequest = requestToAttach;
     requestToAttach->pPrevRequest = this->pPrevRequest;
     this->pPrevRequest = requestToAttach;
