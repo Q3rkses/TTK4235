@@ -35,6 +35,18 @@ int main(){
     Request mTail = Request_Init(-1, DIRN_DOWN, false);
     Queue mQueue = Queue_Init(&mHead, &mTail);
 
+    /*---------------------Testing Queue System---------------------------*/
+    Request req1 = Request_Init(4,DIRN_DOWN,false);
+    Request req2 = Request_Init(3,DIRN_STOP,false);
+    Request req3 = Request_Init(4,DIRN_DOWN,false);
+    Request req4 = Request_Init(2,DIRN_DOWN,false);
+
+    Queue_Print(&mQueue);
+    /*Attach_After_This((&mQueue)->head, &req1, &mQueue);
+    Queue_Print(&mQueue);
+    Delete_From_Queue(&req1, &mQueue);
+    Queue_Print(&mQueue);*/
+    /*--------------------------------------------------------------------*/
 
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
 
@@ -48,11 +60,15 @@ int main(){
 
     printf("\n------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
-    while(1){  
-        /**------------------------- FLOOR INDICATOR -------------------------*/
-       
+    while(1){
+    
         /** The Elevator position given by sensor*/
         int mCurrentFloor = elevio_floorSensor();
+
+        /*---------------------Testing Queue System---------------------------*/
+        
+        /**------------------------- FLOOR INDICATOR -------------------------*/
+       
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){

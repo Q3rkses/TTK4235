@@ -14,20 +14,13 @@
  * @param off, True if someone is getting off at current floor.
  * @param pNextRequest, next request in queue
 */
-
-typedef struct Request{
+typedef struct Request {
     struct Request *pNextRequest;
     struct Request *pPrevRequest;
     int floor;
     MotorDirection direction;
     bool off;
 } Request;
-
-
-/**
- * @brief Request_Get_Direction function, used to get the direction of a request.
- * @return int, the direction of the request.
-*/
 
 /**
  * @brief initializing the request class, used to store information about a request.

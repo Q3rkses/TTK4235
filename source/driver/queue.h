@@ -5,6 +5,7 @@
 
 #pragma once
 #include "request.h"
+#include "door.h"
 #define MAX_QUEUE_NODE_AMOUNT 12
 
 /**
@@ -38,5 +39,9 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue);
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
+
+void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door);
+
+void Empty_Queue(Queue *queue);
 
 void Queue_Print(Queue *pQueue);

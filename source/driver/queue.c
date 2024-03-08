@@ -47,7 +47,6 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
 }
 
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore){
-    /*int volatile *currentFloor = elevio_floorSensor(); // ? Can you constantly detect and change currentFloor? */
     MotorDirection elevatorDirn;
     if (request->floor - mCurrentFloor > 0) {
         elevatorDirn = DIRN_UP;
@@ -137,7 +136,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
 
 void Delete_From_Queue(Request *request, Queue *queue){
     if (queue->head == NULL || queue->tail == NULL || queue->numberOfNodes < 2) {
-        printf("There are not enough elements in Queue. Cannot apply Delete_From_Queue().\n\n");
+        printf("Cannot apply Delete_From_Queue().\n\n");
     }
     bool foundRequest = false;
     for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
@@ -153,6 +152,7 @@ void Delete_From_Queue(Request *request, Queue *queue){
                 iteratorNode->pNextRequest->pPrevRequest = iteratorNode->pPrevRequest;
                 tempPrev = NULL;
             }
+            free(temp); // I think this is correct
             foundRequest = true;
             break;
         }
@@ -162,6 +162,30 @@ void Delete_From_Queue(Request *request, Queue *queue){
         printf("Request deleted.\n\n");
     } else {
         printf("Request not in queue. Therefore cannot delete request!\n\n");
+    }
+}
+
+// To test if this will work you should test the following scenario
+// the elevator starts at floor 1, inside the person wants to go to floor 2
+// at the same time someone at floor 2 will go down, but someone at floor 4 will
+// also go down. The best behaviour here is to prioritize the cabin, then since you have arrived at 
+// the floor go down for the person in floor 2, and then go up to 4
+void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door){ // should this go on forever itself as well, because the while loop in main is going forever
+    if (door.isOpen) {
+        for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+            if (iteratorNode->floor == mCurrentFloor) {
+                Delete_From_Queue(iteratorNode, queue);
+            }
+        }
+    }
+}
+
+void Empty_Queue(Queue *queue){
+    for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+        if (iteratorNode->pPrevRequest == queue->head) {
+            continue;
+        }
+        Delete_From_Queue(iteratorNode->pPrevRequest, queue);
     }
 }
 
