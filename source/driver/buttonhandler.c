@@ -65,10 +65,15 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
                         *btntype = b;
                         *floor = f;
 
+                        /**MAKING AND FILLING THE REQUEST*/
                         Request *pReq = (Request*)malloc(sizeof(Request));
+                        pReq->floor = f;
+                        pReq->direction = b;
+                        pReq->off = false;
                         return pReq;
                     }
-                } 
+                }
+            
 
             /** if (btnPressed == 1){
                 if (panel->PanelButtonState[f][b] == 1 && (5*b+f) != (*btntype*5 + *floor)){
@@ -85,4 +90,5 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
                 } */
             }
         }
+        return NULL;
     }

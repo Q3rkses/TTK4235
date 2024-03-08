@@ -22,3 +22,36 @@ MotorDirection Request_Get_Direction(Request request){
 bool Request_Is_Getting_Off(Request request){ 
     return request.off;
 };
+
+
+void Request_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction){ 
+    switch(request->direction){
+        case BUTTON_CAB:
+            if(request->floor > currFloor){
+                direction = DIRN_UP;
+            } else if(request->floor < currFloor){
+                direction = DIRN_DOWN;
+            } else {
+                direction = DIRN_STOP;
+            }
+
+        case BUTTON_HALL_DOWN:
+            if(request->floor > currFloor){
+                direction = DIRN_UP;
+            } else if(request->floor < currFloor){
+                direction = DIRN_DOWN;
+            } else {
+                direction = DIRN_STOP;
+            
+            }
+
+        case BUTTON_HALL_UP:
+            if(request->floor > currFloor){
+                direction = DIRN_UP;
+            } else if(request->floor < currFloor){
+                direction = DIRN_DOWN;
+            } else {
+                direction = DIRN_STOP;
+            }
+    }
+};
