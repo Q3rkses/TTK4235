@@ -64,6 +64,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
                 requestInElevatorsWay = true;
             } // check again
             if (request->direction == elevatorDirn && requestInElevatorsWay) {
+                *attachBefore = true;
                 return iteratorNode;
             }
             if (iteratorNode->pPrevRequest == NULL) {
@@ -84,6 +85,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_UP && request->direction == DIRN_UP && requestInElevatorsWay) {
+                *attachBefore = true;
                 return iteratorNode;
             }
             if (iteratorNode->pPrevRequest == NULL) {
@@ -104,6 +106,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_DOWN && request->direction == DIRN_DOWN && requestInElevatorsWay) {
+                *attachBefore = true;
                 return iteratorNode;
             }
             if (iteratorNode->pPrevRequest == NULL) {
