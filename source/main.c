@@ -84,7 +84,7 @@ int main(){
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         if(mQueue.head->pNextRequest != mQueue.tail){
-            Request_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
+            Set_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
             elevio_motorDirection(mDirection);
         }
 

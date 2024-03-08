@@ -56,9 +56,9 @@ bool Request_Is_Getting_Off(Request request);
 
 
 /**
- * @brief Request_Elevator_Direction function used to logically decide the direction the elevator should move in.
+ * @brief Set_Elevator_Direction function used to logically decide the direction the elevator should move in.
  * @param request the request.
  * @param currFloor the current floor of the elevator.
  * @param direction the direction of the elevator (global variable gets changed instead of a return).
 */
-void Request_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction);
+void Set_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction);
