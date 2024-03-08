@@ -185,13 +185,15 @@ void Delete_From_Queue(Request *request, Queue *queue){
 // at the same time someone at floor 2 will go down, but someone at floor 4 will
 // also go down. The best behaviour here is to prioritize the cabin, then since you have arrived at 
 // the floor go down for the person in floor 2, and then go up to 4
-void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door){ // should this go on forever itself as well, because the while loop in main is going forever
+void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door, Elevatorpanel *panel){ // should this go on forever itself as well, because the while loop in main is going forever
     if (door.isOpen) {
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode->pPrevRequest == queue->head) {
                 continue;
             }
             if (iteratorNode->pPrevRequest->floor == mCurrentFloor) {
+                panel->PanelButtonState[iteratorNode->pPrevRequest->floor][iteratorNode->pPrevRequest->direction] = 0;
+                Turn_Off_Elevator_Button_Lamp(iteratorNode->pPrevRequest->floor, iteratorNode->pPrevRequest->direction);
                 Delete_From_Queue(iteratorNode->pPrevRequest, queue);
             }
         }
