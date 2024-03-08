@@ -101,7 +101,8 @@ int main(){
             if (get_elapsed_time(mTime) > 3){
                 Door_Close(door);
                 mTimerCounter = 0;
-/**------------------------- REMOVE REQUEST FROM QUEUE HERE -------------------------*/
+
+                Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door);
             }
         }
 
