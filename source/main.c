@@ -11,6 +11,7 @@
 #include "driver/buttonhandler.h"
 #include "driver/request.h"
 #include "driver/queue.h"
+#include "driver/timer.h"
 
 
 
@@ -21,10 +22,12 @@ int main(){
 
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
+    Request *pRequest = NULL;
     
     ButtonType mButtonType = -1;
     int mFloor = -1;
-    int mDirection = DIRN_STOP;
+    MotorDirection mDirection = DIRN_STOP;
+    time_t mTime = get_current_time();
 
     elevio_init();
     Elevatorpanel_init(&panel);
@@ -89,7 +92,29 @@ int main(){
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        Update_Button_Press(&panel, &mFloor, &mButtonType);
+        if(Update_Button_Press(&panel, &mFloor, &mButtonType) != NULL){
+            pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
+            Attach_Request_To_Queue(pRequest, &mQueue, mCurrentFloor);
+        }
+
+        /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
+        if(mQueue.head->pNextRequest != mQueue.tail){
+            Request_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
+            elevio_motorDirection(mDirection);
+        }
+
+        /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
+        if(mCurrentFloor == mQueue.head->pNextRequest->floor){
+            elevio_motorDirection(DIRN_STOP);
+            Open_Door();
+            
+            /**------------------------- REMOVE REQUEST FROM QUEUE HERE -------------------------*/
+            
+
+            Close_Door();
+        }
+
+
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){
