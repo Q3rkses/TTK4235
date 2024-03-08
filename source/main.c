@@ -93,7 +93,7 @@ int main(){
             elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
 
-            Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door);
+            Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
