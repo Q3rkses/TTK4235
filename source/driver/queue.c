@@ -187,9 +187,12 @@ void Delete_From_Queue(Request *request, Queue *queue){
 // the floor go down for the person in floor 2, and then go up to 4
 void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door){ // should this go on forever itself as well, because the while loop in main is going forever
     if (door.isOpen) {
-        for (Request *iteratorNode = queue->head; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-            if (iteratorNode->floor == mCurrentFloor) {
-                Delete_From_Queue(iteratorNode, queue);
+        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+            if (iteratorNode->pPrevRequest == queue->head) {
+                continue;
+            }
+            if (iteratorNode->pPrevRequest->floor == mCurrentFloor) {
+                Delete_From_Queue(iteratorNode->pPrevRequest, queue);
             }
         }
     }
