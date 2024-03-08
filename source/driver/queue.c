@@ -58,20 +58,15 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         
     case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-            bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
-                || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                requestInElevatorsWay = true;
-            } // check again
-            if (request->direction == elevatorDirn && requestInElevatorsWay) {
+            if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return iteratorNode;
+                return queue->tail;
             }
-            if (iteratorNode->pPrevRequest == NULL) {
-                *attachBefore = false;
-                return iteratorNode;
+            bool requestInElevatorsWay = false;
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                requestInElevatorsWay = true;
             }
-            if (iteratorNode->pNextRequest == NULL) {
+            if (requestInElevatorsWay) {
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -79,20 +74,15 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         break;
     case DIRN_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-            bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
-                || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                requestInElevatorsWay = true;
-            }
-            if (elevatorDirn == DIRN_UP && request->direction == DIRN_UP && requestInElevatorsWay) {
+            if (iteratorNode == queue->tail) {
                 *attachBefore = true;
                 return iteratorNode;
             }
-            if (iteratorNode->pPrevRequest == NULL) {
-                *attachBefore = false;
-                return iteratorNode;
+            bool requestInElevatorsWay = false;
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                requestInElevatorsWay = true;
             }
-            if (iteratorNode->pNextRequest == NULL) {
+            if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -100,20 +90,15 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         break;
     case DIRN_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-            bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor)
-                || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                requestInElevatorsWay = true;
-            }
-            if (elevatorDirn == DIRN_DOWN && request->direction == DIRN_DOWN && requestInElevatorsWay) {
+            if (iteratorNode == queue->tail) {
                 *attachBefore = true;
                 return iteratorNode;
             }
-            if (iteratorNode->pPrevRequest == NULL) {
-                *attachBefore = false;
-                return iteratorNode;
+            bool requestInElevatorsWay = false;
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                requestInElevatorsWay = true;
             }
-            if (iteratorNode->pNextRequest == NULL) {
+            if (elevatorDirn == DIRN_DOWN && requestInElevatorsWay) {
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -145,6 +130,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
         free(requestToAttach);
         return;
     }
+    
     this->pNextRequest->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this->pNextRequest;
     this->pNextRequest = requestToAttach;
