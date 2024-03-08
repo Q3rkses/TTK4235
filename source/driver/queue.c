@@ -111,6 +111,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
 void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
     if (this == queue->head) {
         printf("Cannot attach before queue->head!\n\n");
+        free(requestToAttach);
         return;
     }
     this->pPrevRequest->pNextRequest = requestToAttach;
@@ -124,6 +125,7 @@ void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue){
 void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
     if (this == queue->tail) {
         printf("Cannot attach after queue->tail!\n\n");
+        free(requestToAttach);
         return;
     }
     this->pNextRequest->pPrevRequest = requestToAttach;

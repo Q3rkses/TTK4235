@@ -27,30 +27,30 @@ void Request_Elevator_Direction(Request *request, int currFloor, MotorDirection 
     switch(request->direction){
         case BUTTON_CAB:
             if(request->floor > currFloor){
-                direction = DIRN_UP;
+                *direction = DIRN_UP;
             } else if(request->floor < currFloor){
-                direction = DIRN_DOWN;
+                *direction = DIRN_DOWN;
             } else {
-                direction = DIRN_STOP;
+                *direction = DIRN_STOP;
             }
 
         case BUTTON_HALL_DOWN:
             if(request->floor > currFloor){
-                direction = DIRN_UP;
+                *direction = DIRN_UP;
             } else if(request->floor < currFloor){
-                direction = DIRN_DOWN;
+                *direction = DIRN_DOWN;
             } else {
-                direction = DIRN_STOP;
+                *direction = DIRN_STOP;
             
             }
 
         case BUTTON_HALL_UP:
             if(request->floor > currFloor){
-                direction = DIRN_UP;
+                *direction = DIRN_UP;
             } else if(request->floor < currFloor){
-                direction = DIRN_DOWN;
+                *direction = DIRN_DOWN;
             } else {
-                direction = DIRN_STOP;
+                *direction = DIRN_STOP;
             }
     }
 }
