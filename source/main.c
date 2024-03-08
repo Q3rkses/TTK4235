@@ -23,6 +23,7 @@ int main(){
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
     Request *pRequest = NULL;
+    Door door;
     
     ButtonType mButtonType = -1;
     int mFloor = -1;
@@ -101,7 +102,7 @@ int main(){
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             elevio_motorDirection(DIRN_STOP);
-            Open_Door();
+            Door_Open(door);
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
@@ -109,7 +110,7 @@ int main(){
             }
 
             if (get_elapsed_time(mTime) > 3){
-                Close_Door();
+                Door_Close(door);
                 mTimerCounter = 0;
 /**------------------------- REMOVE REQUEST FROM QUEUE HERE -------------------------*/
             }
