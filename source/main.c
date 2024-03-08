@@ -133,13 +133,11 @@ int main(){
         }
         
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
-        if(elevio_obstruction()){
+        while(elevio_obstruction()){
             elevio_motorDirection(DIRN_STOP);
             buttonhandler.ObstructionBtnState = true;
-        } else {
-            /**implement continue further requests here*/
-            buttonhandler.ObstructionBtnState = false;
         }
+        buttonhandler.ObstructionBtnState = false;
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
