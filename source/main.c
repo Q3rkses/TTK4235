@@ -91,7 +91,9 @@ int main(){
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             elevio_motorDirection(DIRN_STOP);
-            Door_Open(door);
+            Door_Open(&door);
+
+            Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door);
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
@@ -99,10 +101,8 @@ int main(){
             }
 
             if (get_elapsed_time(mTime) > 3){
-                Door_Close(door);
+                Door_Close(&door);
                 mTimerCounter = 0;
-
-                Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door);
             }
         }
 
@@ -135,5 +135,7 @@ int main(){
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
 
+    printf("------------------------- ELEVATOR STOP -------------------------\n");
+    Empty_Queue(&mQueue);
     return 0;
 }

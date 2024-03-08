@@ -2,12 +2,12 @@
 #include "elevio.h"
 
 
-void Door_Open(Door door){
-    door.isOpen = true;
+void Door_Open(Door *door){
+    door->isOpen = true;
     elevio_doorOpenLamp(1);
 }
 
-void Door_Close(Door door){
-    door.isOpen = false;
+void Door_Close(Door *door){
+    door->isOpen = false;
     elevio_doorOpenLamp(0);
 }
