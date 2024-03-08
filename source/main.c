@@ -56,28 +56,22 @@ int main(){
 
         /**Elevator Light position*/
         if(mCurrentFloor == 0){
-            int mDirection = DIRN_STOP;
             elevio_floorIndicator(0);
-            elevio_motorDirection(mDirection);
 
         } else if(mCurrentFloor == 1){
             elevio_floorIndicator(1);
-            elevio_motorDirection(mDirection);
-
 
         } else if(mCurrentFloor == 2){
             elevio_floorIndicator(2);
-            elevio_motorDirection(mDirection);
 
         } else if(mCurrentFloor == 3){
             elevio_floorIndicator(3);
-            int mDirection = DIRN_DOWN;
         }
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
-        if(Update_Button_Press(&panel, &mFloor, &mButtonType) != NULL){
-            pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
+        pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
+        if(pRequest != NULL){
             Attach_Request_To_Queue(pRequest, &mQueue, mCurrentFloor);
         }
 
