@@ -28,6 +28,7 @@ int main(){
     int mFloor = -1;
     MotorDirection mDirection = DIRN_STOP;
     time_t mTime = get_current_time();
+    int mTimerCounter = 0;
 
     elevio_init();
     Elevatorpanel_init(&panel);
@@ -102,10 +103,16 @@ int main(){
             elevio_motorDirection(DIRN_STOP);
             Open_Door();
             
-            /**------------------------- REMOVE REQUEST FROM QUEUE HERE -------------------------*/
-            
+            if (mTimerCounter == 0){
+                mTime = get_current_time();
+                mTimerCounter++;
+            }
 
-            Close_Door();
+            if (get_elapsed_time(mTime) > 3){
+                Close_Door();
+                mTimerCounter = 0;
+/**------------------------- REMOVE REQUEST FROM QUEUE HERE -------------------------*/
+            }
         }
 
 
@@ -127,13 +134,12 @@ int main(){
         }
         
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
-        if(elevio_obstruction()){
-            elevio_motorDirection(DIRN_STOP);
+        while(elevio_obstruction()){
             buttonhandler.ObstructionBtnState = true;
-        } else {
-            /**implement continue further requests here*/
-            buttonhandler.ObstructionBtnState = false;
+            elevio_motorDirection(DIRN_STOP);
         }
+        buttonhandler.ObstructionBtnState = false;
+        
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
