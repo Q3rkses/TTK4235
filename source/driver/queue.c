@@ -55,6 +55,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
     } // possible to flag off here, actually no cuz elevatorDirn should either be up or down
     switch (request->direction)
     {
+        
     case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             bool requestInElevatorsWay = false;
