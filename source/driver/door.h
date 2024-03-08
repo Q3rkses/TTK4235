@@ -17,10 +17,10 @@ typedef struct Door{
  * @brief This function turns on the door lamp
  * @return Door
 */
-void Door_Open(Door door);
+void Door_Open(Door *door);
 
 /**
  * @brief This function turns off the door lamp
  * @return Door
 */
-void Door_Close(Door door);
+void Door_Close(Door *door);
