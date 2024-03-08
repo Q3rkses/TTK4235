@@ -53,10 +53,8 @@ int main(){
 
     while(1){
     
-        /** The Elevator position given by sensor*/
+        /**------------------------- SENSOR INFORMATION -------------------------*/
         int mCurrentFloor = elevio_floorSensor();
-
-        /*---------------------Testing Queue System---------------------------*/
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
        
@@ -93,7 +91,6 @@ int main(){
             elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
 
-            Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
@@ -101,12 +98,13 @@ int main(){
             }
 
             if (get_elapsed_time(mTime) > 3){
+                for(int i = 0; i > 3; i++){
+                    Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
+                }
                 Door_Close(&door);
                 mTimerCounter = 0;
             }
         }
-
-
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         if(elevio_stopButton()){
