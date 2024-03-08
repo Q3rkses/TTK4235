@@ -30,6 +30,7 @@ int main(){
     MotorDirection mDirection = DIRN_STOP;
     time_t mTime = get_current_time();
     int mTimerCounter = 0;
+    bool superstop = false;
 
     elevio_init();
     Elevatorpanel_init(&panel);
@@ -83,26 +84,29 @@ int main(){
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
-            elevio_motorDirection(mDirection);
+            if (mCurrentFloor != -1 && superstop == false) {
+                elevio_motorDirection(mDirection);
+            }
         }
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
-
+            superstop = true;
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
                 mTimerCounter++;
             }
 
-            if (get_elapsed_time(mTime) > 3){
-                for(int i = 0; i > 3; i++){
+            if (get_elapsed_time(mTime) > 2){
+                for(int i = 0; i < 3; i++){
                     Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
                 }
                 Door_Close(&door);
                 mTimerCounter = 0;
+                superstop = false;
             }
         }
 
