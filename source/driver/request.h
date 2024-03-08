@@ -28,9 +28,6 @@ typedef struct Request {
  * @param direction, True if up, false if down.
  * @param off, True if someone is getting off at current floor.
 */
-<<<<<<< HEAD
-Request Request_Init(int floor, MotorDirection direction, bool off);
-=======
 
 Request Request_Init(int floor, MotorDirection direction, bool off);
 
@@ -65,4 +62,3 @@ bool Request_Is_Getting_Off(Request request);
  * @param direction the direction of the elevator (global variable gets changed instead of a return).
 */
 void Request_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction);
->>>>>>> e4b0078ceca522db46ca3281e4f392b074befc57
