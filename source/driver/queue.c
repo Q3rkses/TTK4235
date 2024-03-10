@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, int mCurrentFloor){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
@@ -46,7 +46,7 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
     return false;
 }
 
-Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore){
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore){
     MotorDirection elevatorDirn;
     if (request->floor - mCurrentFloor > 0) {
         elevatorDirn = DIRN_UP;
@@ -58,8 +58,20 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
-        *attachBefore = true;
-        return queue->tail;
+        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
+            if (iteratorNode == queue->tail) {
+                *attachBefore = true;
+                return queue->tail;
+            }
+            bool requestInElevatorsWay = false;
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                requestInElevatorsWay = true;
+            }
+            if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
+                *attachBefore = true;
+                return iteratorNode;
+            }
+        }
         break;
     case BUTTON_HALL_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
@@ -165,7 +177,7 @@ void Delete_From_Queue(Request *request, Queue *queue){
 // at the same time someone at floor 2 will go down, but someone at floor 4 will
 // also go down. The best behaviour here is to prioritize the cabin, then since you have arrived at 
 // the floor go down for the person in floor 2, and then go up to 4
-void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door, Elevatorpanel *panel){ // should this go on forever itself as well, because the while loop in main is going forever
+void Automatic_Deletion_From_Queue(Queue *queue, double mCurrentFloor, Door door, Elevatorpanel *panel){ // should this go on forever itself as well, because the while loop in main is going forever
     if (door.isOpen) {
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode->pPrevRequest == queue->head) {
