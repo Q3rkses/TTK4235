@@ -134,12 +134,14 @@ int main(){
         
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_obstruction()){
-            if (mObstructionCounter == 0){
-                /**SUPERSTOP THE PROGRAM*/
-                
-                superstop = true;
+            /**If the elevator is on a floor the door shall remain open untill it is no longer obstructed*/
+            if (mCurrentFloor != -1){
+                Door_Open(&door);
+            }
 
-                /** Save current direction*/
+            if (mObstructionCounter == 0){
+                /**Set all the correct states for variables*/
+                superstop = true;
                 mTimerCounter = 0;
                 mTempDirection = mDirection;
                 mObstructionCounter++;
@@ -155,10 +157,19 @@ int main(){
             }
 
             if (get_elapsed_time(mTime) > 2){
+                /**Setting the correct states for variables*/
                 superstop = false;
-                elevio_motorDirection(mTempDirection);
-                mObstructionCounter = 0;
                 buttonhandler.ObstructionBtnState = false;
+                mTimerCounter = 0;
+                mObstructionCounter = 0;
+
+                if(mCurrentFloor != -1){
+                    /**If the elevator is at a floor hold the door open and close after 3 seconds*/
+                    Door_Close(&door);
+                } else {
+                    /**If not on a floor continue in the same direction as before after 3 seconds*/
+                    elevio_motorDirection(mTempDirection);
+                }
             }
             
         }
