@@ -119,14 +119,11 @@ int main(){
         }
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
-        else if(mQueue.head->pNextRequest != mQueue.tail){
+        if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
 
             if(!superstop){
                 if(mCurrentFloor != -1){
-                    elevio_motorDirection(mDirection);
-                }
-                if(mCurrentFloor == -1 && mDirection == DIRN_STOP){
                     elevio_motorDirection(mDirection);
                 }
             }
@@ -167,6 +164,14 @@ int main(){
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
                 mStopCounter = 0;
+
+                if(mQueue.head->pNextRequest != mQueue.tail){
+                    Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
+                    
+                    if(!superstop){
+                    elevio_motorDirection(mDirection);
+                    }
+                }
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
