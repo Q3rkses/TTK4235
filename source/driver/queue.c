@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloo
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop);
     if (attachBefore) {
         Attach_Before_This(pThis, request, queue);
     } else {
@@ -46,7 +46,7 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
     return false;
 }
 
-Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore){
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, bool superstop){
     MotorDirection elevatorDirn;
     if (request->floor - mCurrentFloor > 0) {
         elevatorDirn = DIRN_UP;
@@ -58,23 +58,28 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
+        printf("-------------------THIS REQUEST IS FROM CABIN-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
                 return queue->tail;
             }
-            if (iteratorNode->direction != BUTTON_CAB) {
+            if (iteratorNode->direction != BUTTON_CAB && superstop) {
                 *attachBefore = true;
+                return iteratorNode;
+            } else if (iteratorNode->direction != BUTTON_CAB && !superstop) {
+                *attachBefore = false;
                 return iteratorNode;
             }
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
             || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                *attachBefore = false;
+                *attachBefore = true;
                 return iteratorNode;
             }
         }
         break;
     case BUTTON_HALL_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
+        printf("-------------------THIS REQUEST IS FROM HALL, UPWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
@@ -93,6 +98,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         break;
         // THIS DONT WORK
     case BUTTON_HALL_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
+        printf("-------------------THIS REQUEST IS FROM HALL, DOWNWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
@@ -110,6 +116,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         }
         break;
     default:
+        printf("------------------------------DEFAULT IN SWITCH CASE ACTIVATED. BAD!---------------------------------\n\n");
         break;
     }
 }
