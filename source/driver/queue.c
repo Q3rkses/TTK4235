@@ -55,12 +55,13 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
     } // possible to flag off here, actually no cuz elevatorDirn should either be up or down
     switch (request->direction)
     {
-        
+        // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
+        // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return queue->tail;
+                return iteratorNode;
             }
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
@@ -88,6 +89,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
             }
         }
         break;
+        // THIS DONT WORK
     case DIRN_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
@@ -130,7 +132,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue){
         free(requestToAttach);
         return;
     }
-    
+
     this->pNextRequest->pPrevRequest = requestToAttach;
     requestToAttach->pNextRequest = this->pNextRequest;
     this->pNextRequest = requestToAttach;
