@@ -135,6 +135,12 @@ int main(){
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_obstruction()){
             if (mObstructionCounter == 0){
+                /**SUPERSTOP THE PROGRAM*/
+                
+                superstop = true;
+
+                /** Save current direction*/
+                mTimerCounter = 0;
                 mTempDirection = mDirection;
                 mObstructionCounter++;
             }
@@ -143,9 +149,18 @@ int main(){
         }
         
         if (mObstructionCounter > 0 && !elevio_obstruction()){
-            elevio_motorDirection(mTempDirection);
-            mObstructionCounter = 0;
-            buttonhandler.ObstructionBtnState = false;
+            if (mTimerCounter == 0){
+                mTime = get_current_time();
+                mTimerCounter++;
+            }
+
+            if (get_elapsed_time(mTime) > 2){
+                superstop = false;
+                elevio_motorDirection(mTempDirection);
+                mObstructionCounter = 0;
+                buttonhandler.ObstructionBtnState = false;
+            }
+            
         }
         
         nanosleep(&(struct timespec){0, 20*100*100}, NULL);
