@@ -58,20 +58,8 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
-        for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
-            if (iteratorNode == queue->tail) {
-                *attachBefore = true;
-                return queue->tail;
-            }
-            bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                requestInElevatorsWay = true;
-            }
-            if (requestInElevatorsWay) {
-                *attachBefore = true;
-                return iteratorNode;
-            }
-        }
+        *attachBefore = true;
+        return queue->tail;
         break;
     case BUTTON_HALL_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
