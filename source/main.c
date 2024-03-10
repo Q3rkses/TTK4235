@@ -73,19 +73,7 @@ int main(){
         }
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
-  
-        if(mCurrentFloor == 0){
-            elevio_floorIndicator(0);
-
-        } else if(mCurrentFloor == 1){
-            elevio_floorIndicator(1);
-
-        } else if(mCurrentFloor == 2){
-            elevio_floorIndicator(2);
-
-        } else if(mCurrentFloor == 3){
-            elevio_floorIndicator(3);
-        }
+        Floor_Light(mCurrentFloor);
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
@@ -127,12 +115,6 @@ int main(){
                     elevio_motorDirection(mDirection);
                 }
             }
-            
-            else if(!superstop && mCurrentFloor == -1){
-            elevio_motorDirection(mDirection);
-            }
-
-
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
