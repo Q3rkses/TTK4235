@@ -63,12 +63,12 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 *attachBefore = true;
                 return queue->tail;
             }
-            bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                requestInElevatorsWay = true;
-            }
-            if (requestInElevatorsWay) {
+            if (iteratorNode->direction != BUTTON_CAB) {
                 *attachBefore = true;
+                return attachBefore;
+            }
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                *attachBefore = false;
                 return iteratorNode;
             }
         }
