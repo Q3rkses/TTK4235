@@ -56,11 +56,12 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
     switch (request->direction)
     {
         // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
+        // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return queue->tail;
+                return iteratorNode;
             }
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
