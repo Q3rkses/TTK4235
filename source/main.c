@@ -36,6 +36,7 @@ int main(){
     /**COUNTERS AND TEMP VALUES*/
     int mTimerCounter = 0;
     int mObstructionCounter = 0;
+    int mStopCounter = 0;
     int mTempDirection = 0;
 
     /**INITIALIZE STRUCTS*/
@@ -117,22 +118,50 @@ int main(){
         }
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
-        if(elevio_stopButton()){
+        while(elevio_stopButton()){
+            if (mCurrentFloor != -1){
+                Door_Open(&door);
+            }
+
+            if (mStopCounter == 0){
+                /**Set all the correct states for variables*/
+                superstop = true;
+                mTimerCounter = 0;
+                mTempDirection = mDirection;
+                mStopCounter++;
+            }
+
             elevio_motorDirection(DIRN_STOP);
             buttonhandler.StopBtnState = true;
-            Turn_On_Stop_Button_Lamp();
-            break;
+
+        }
 
         /** Sleep for 1 second after button released then continue*/
-        } else{
-            buttonhandler.StopBtnState = false;
-            Turn_Off_Stop_Button_Lamp();
+        if (mStopCounter > 0 && !elevio_Stop()){
+            if (mTimerCounter == 0){
+                mTime = get_current_time();
+                mTimerCounter++;
+            }
 
-            /**implement continue here*/
-        
+            if (get_elapsed_time(mTime) > 2){
+                /**Setting the correct states for variables*/
+                superstop = false;
+                buttonhandler.StopBtnState = false;
+                mTimerCounter = 0;
+                mStopCounter = 0;
+
+                if(mCurrentFloor != -1){
+                    /**If the elevator is at a floor hold the door open and close after 3 seconds*/
+                    Door_Close(&door);
+                } else {
+                    /**If not on a floor continue in the same direction as before after 3 seconds*/
+                    elevio_motorDirection(mTempDirection);
+                }
+            }
+            
         }
         
-        /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
+        /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_obstruction()){
             /**If the elevator is on a floor the door shall remain open untill it is no longer obstructed*/
             if (mCurrentFloor != -1){
