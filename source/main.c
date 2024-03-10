@@ -121,8 +121,14 @@ int main(){
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         else if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
-            if (superstop == false) {
-                elevio_motorDirection(mDirection);
+
+            if(!superstop){
+                if(mCurrentFloor != -1){
+                    elevio_motorDirection(mDirection);
+                }
+                if(mCurrentFloor == -1 && mDirection == DIRN_STOP){
+                    elevio_motorDirection(mDirection);
+                }
             }
         }
 
