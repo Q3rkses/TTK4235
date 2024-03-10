@@ -52,12 +52,12 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         elevatorDirn = DIRN_UP;
     } else if (request->floor - mCurrentFloor < 0) {
         elevatorDirn = DIRN_DOWN;
-    } // possible to flag off here, actually no cuz elevatorDirn should either be up or down
+    }
     switch (request->direction)
     {
         // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
-    case DIRN_STOP: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
+    case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
@@ -73,7 +73,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
             }
         }
         break;
-    case DIRN_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
+    case BUTTON_HALL_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
@@ -90,7 +90,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         }
         break;
         // THIS DONT WORK
-    case DIRN_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
+    case BUTTON_HALL_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
@@ -205,7 +205,7 @@ void Queue_Print(Queue *pQueue){
     printf("QUEUE_PRINT BEGIN\n\n");
     int counter = 0;
     for (Request *i = pQueue->head; i != NULL; i = i->pNextRequest) {
-        printf("%d. request:\nFloor: %d\nDirection: %d\nOff: %d\nPrev node adress: %d\nCurrent node adress: %d\nNext node adress: %d\n\n", counter, i->floor, i->direction, i->off, i->pPrevRequest, i, i->pNextRequest);
+        printf("%d. request:\nFloor: %d\nButtonType: %d\nOff: %d\nPrev node adress: %d\nCurrent node adress: %d\nNext node adress: %d\n\n", counter, i->floor, i->direction, i->off, i->pPrevRequest, i, i->pNextRequest);
         counter++;
     }
     printf("There are %d request(s) in Queue\n\n", pQueue->numberOfNodes);
