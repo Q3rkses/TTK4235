@@ -157,8 +157,6 @@ int main(){
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
                     Door_Close(&door);
-                    /**------------------------- FEMOVE THE BREAK WHEN FINISHED -------------------------*/
-                    break;
                 }
             }
             
