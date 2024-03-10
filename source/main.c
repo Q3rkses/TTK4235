@@ -42,8 +42,8 @@ int main(){
     /**INITIALIZE STRUCTS*/
     elevio_init();
     Elevatorpanel_init(&panel);
-    Request mHead = Request_Init(-1, DIRN_DOWN, false);
-    Request mTail = Request_Init(-1, DIRN_DOWN, false);
+    Request mHead = Request_Init(-2, DIRN_DOWN, false);
+    Request mTail = Request_Init(-2, DIRN_DOWN, false);
     Queue mQueue = Queue_Init(&mHead, &mTail);
 
     printf("------------------------- GOING TO FIRST FLOOR TO BEFORE REQUESTS ARE ELIGEBLE -------------------------\n\n\n");
@@ -129,7 +129,6 @@ int main(){
                 Empty_Queue(&mQueue, &panel);
                 superstop = true;
                 mTimerCounter = 0;
-                mTempDirection = mDirection;
                 mStopCounter++;
             }
 
@@ -157,11 +156,6 @@ int main(){
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
                     Door_Close(&door);
-                    /**------------------------- FEMOVE THE BREAK WHEN FINISHED -------------------------*/
-                    break;
-                } else {
-                    /**If not on a floor continue in the same direction as before after 3 seconds*/
-                    elevio_motorDirection(mTempDirection);
                     /**------------------------- FEMOVE THE BREAK WHEN FINISHED -------------------------*/
                     break;
                 }
