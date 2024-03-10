@@ -20,18 +20,25 @@ int main(){
     printf("------------------------- ELEVATOR START -------------------------\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
+    /**MAKE STRUCT OBJECTS*/
     Buttonhandler buttonhandler;
     Elevatorpanel panel;
     Request *pRequest = NULL;
     Door door;
     
+    /**GLOBAL VARIABLES*/
     ButtonType mButtonType = -1;
     int mFloor = -1;
     MotorDirection mDirection = DIRN_STOP;
     time_t mTime = get_current_time();
-    int mTimerCounter = 0;
     bool superstop = false;
 
+    /**COUNTERS AND TEMP VALUES*/
+    int mTimerCounter = 0;
+    int mObstructionCounter = 0;
+    int mTempDirection = 0;
+
+    /**INITIALIZE STRUCTS*/
     elevio_init();
     Elevatorpanel_init(&panel);
     Request mHead = Request_Init(-1, DIRN_DOWN, false);
@@ -82,14 +89,10 @@ int main(){
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
-            if (mCurrentFloor == -1 && superstop == false) {
+            if (mCurrentFloor != -1 && superstop == false) {
                 elevio_motorDirection(mDirection);
                 }
-
-            if (mCurrentFloor != -1 && superstop == false) {
-                elevio_motorDirection(DIRN_DOWN);
-                }
-            }
+        }
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
@@ -131,11 +134,19 @@ int main(){
         
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_obstruction()){
-            buttonhandler.ObstructionBtnState = true;
+            if (mObstructionCounter == 0){
+                mTempDirection = mDirection;
+                mObstructionCounter++;
+            }
             elevio_motorDirection(DIRN_STOP);
+            buttonhandler.ObstructionBtnState = true;
         }
-        buttonhandler.ObstructionBtnState = false;
         
+        if (mObstructionCounter > 0 && !elevio_obstruction()){
+            elevio_motorDirection(mTempDirection);
+            mObstructionCounter = 0;
+            buttonhandler.ObstructionBtnState = false;
+        }
         
         nanosleep(&(struct timespec){0, 20*100*100}, NULL);
     }
