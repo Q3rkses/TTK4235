@@ -55,7 +55,8 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
     }
     switch (request->direction)
     {
-        // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
+        // CABIN DONT WORK, STOPBTN not working when elevator is stopbtn is activated between floors
+        // requests get added before tail even if they should be added before
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         printf("-------------------THIS REQUEST IS FROM CABIN-----------------------\n\n");
@@ -96,7 +97,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             }
         }
         break;
-        // THIS DONT WORK
+        // THIS WORKS IF UP ISNT PRIORITIZED THIS IS A PROBLEM OF COURSE
     case BUTTON_HALL_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         printf("-------------------THIS REQUEST IS FROM HALL, DOWNWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
