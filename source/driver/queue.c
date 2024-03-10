@@ -65,9 +65,10 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             }
             if (iteratorNode->direction != BUTTON_CAB) {
                 *attachBefore = true;
-                return attachBefore;
+                return iteratorNode;
             }
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
+            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
                 *attachBefore = false;
                 return iteratorNode;
             }
@@ -80,7 +81,8 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
+            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
@@ -97,7 +99,8 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
+            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_DOWN && requestInElevatorsWay) {
