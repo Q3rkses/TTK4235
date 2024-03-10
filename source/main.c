@@ -118,9 +118,11 @@ int main(){
                 for(int i = 0; i < 3; i++){
                     Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
                 }
-                Door_Close(&door);
+                if (!elevio_obstruction()){
+                    Door_Close(&door);
+                    superstop = false;
+                }
                 mTimerCounter = 0;
-                superstop = false;
             }
         }
 
