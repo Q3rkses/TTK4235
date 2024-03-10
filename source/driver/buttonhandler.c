@@ -102,12 +102,12 @@ void Stop_Button(Queue *mQueue, Buttonhandler *buttonhandler, Elevatorpanel *pan
     
     while(elevio_stopButton()){
         if (mCurrentFloor != -1){
-                    Door_Open(&door);
+                    Door_Open(door);
                 }
 
                 if (mStopCounter == 0){
                     /**Set all the correct states for variables*/
-                    Empty_Queue(&mQueue, &panel);
+                    Empty_Queue(mQueue, panel);
                     superstop = true;
                     mTimerCounter = 0;
                     mStopCounter++;
@@ -135,7 +135,7 @@ void Stop_Button(Queue *mQueue, Buttonhandler *buttonhandler, Elevatorpanel *pan
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
-                    Door_Close(&door);
+                    Door_Close(door);
                 }
             }
         }
