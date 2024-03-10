@@ -18,7 +18,7 @@ typedef struct Request {
     struct Request *pNextRequest;
     struct Request *pPrevRequest;
     int floor;
-    MotorDirection direction;
+    ButtonType direction;
     bool off;
 } Request;
 
@@ -29,7 +29,7 @@ typedef struct Request {
  * @param off, True if someone is getting off at current floor.
 */
 
-Request Request_Init(int floor, MotorDirection direction, bool off);
+Request Request_Init(int floor, ButtonType direction, bool off);
 
 /**
  * @brief Request_Get_Floor function, used to get the desired floor of a request.
@@ -45,7 +45,7 @@ int Request_Get_Floor(Request request);
  * @return bool, the direction of the request 1 is up, 0 is down.
 */
 
-MotorDirection Request_Get_Direction(Request request);
+ButtonType Request_Get_Direction(Request request);
 
 /**
  * @brief Request_Is_Getting_Off function, used to check if someone is getting off at the current floor.
@@ -61,4 +61,4 @@ bool Request_Is_Getting_Off(Request request);
  * @param currFloor the current floor of the elevator.
  * @param direction the direction of the elevator (global variable gets changed instead of a return).
 */
-void Set_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction);
+void Set_Elevator_Direction(Request *request, int currFloor, ButtonType *direction);

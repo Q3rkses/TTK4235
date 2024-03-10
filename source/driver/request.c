@@ -1,7 +1,7 @@
 #include "request.h"
 #include <stdbool.h>
 
-Request Request_Init(int floor, MotorDirection direction, bool off) {
+Request Request_Init(int floor, ButtonType direction, bool off) {
     Request req;
     req.floor = floor;
     req.direction = direction;
@@ -15,7 +15,7 @@ int Request_Get_Floor(Request request) {
     return request.floor;
 }
 
-MotorDirection Request_Get_Direction(Request request) { 
+ButtonType Request_Get_Direction(Request request) { 
     return request.direction;
 }
 
@@ -23,7 +23,7 @@ bool Request_Is_Getting_Off(Request request) {
     return request.off;
 }
 
-void Set_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction) { 
+void Set_Elevator_Direction(Request *request, int currFloor, ButtonType *direction) { 
     switch(request->direction){
         case BUTTON_CAB:
             if(request->floor > currFloor){
