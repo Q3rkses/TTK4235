@@ -24,3 +24,9 @@ void Door_Open(Door *door);
  * @return Door
 */
 void Door_Close(Door *door);
+
+/**
+ * @brief This function initializes the door
+ * @return Door
+*/
+void Door_init(Door *door);
