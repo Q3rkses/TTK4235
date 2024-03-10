@@ -42,6 +42,7 @@ int main(){
     /**INITIALIZE STRUCTS*/
     elevio_init();
     Elevatorpanel_init(&panel);
+    Door_init(&door);
     Request mHead = Request_Init(-2, DIRN_DOWN, false);
     Request mTail = Request_Init(-2, DIRN_DOWN, false);
     Queue mQueue = Queue_Init(&mHead, &mTail);

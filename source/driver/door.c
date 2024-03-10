@@ -11,3 +11,7 @@ void Door_Close(Door *door){
     door->isOpen = false;
     elevio_doorOpenLamp(0);
 }
+
+void Door_init(Door *door){
+    Door_Close(door);
+}
