@@ -15,3 +15,7 @@ void Door_Close(Door *door){
 void Door_init(Door *door){
     Door_Close(door);
 }
+
+void Floor_Light(int floor){
+        elevio_floorIndicator(floor);
+}

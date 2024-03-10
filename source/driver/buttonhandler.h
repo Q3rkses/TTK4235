@@ -80,4 +80,6 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
 
 Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
 
+void Buttonhandler_init(Buttonhandler *buttonhandler);
+
 double Evaluate_Current_Floor(MotorDirection direction, int current_floor);

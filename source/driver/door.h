@@ -30,3 +30,5 @@ void Door_Close(Door *door);
  * @return Door
 */
 void Door_init(Door *door);
+
+void Floor_Light(int floor);

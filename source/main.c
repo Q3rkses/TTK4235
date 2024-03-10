@@ -44,6 +44,7 @@ int main(){
     elevio_init();
     Elevatorpanel_init(&panel);
     Door_init(&door);
+    Buttonhandler_init(&buttonhandler);
     Request mHead = Request_Init(-2, DIRN_DOWN, false);
     Request mTail = Request_Init(-2, DIRN_DOWN, false);
     Queue mQueue = Queue_Init(&mHead, &mTail);
@@ -72,19 +73,7 @@ int main(){
         }
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
-  
-        if(mCurrentFloor == 0){
-            elevio_floorIndicator(0);
-
-        } else if(mCurrentFloor == 1){
-            elevio_floorIndicator(1);
-
-        } else if(mCurrentFloor == 2){
-            elevio_floorIndicator(2);
-
-        } else if(mCurrentFloor == 3){
-            elevio_floorIndicator(3);
-        }
+        Floor_Light(mCurrentFloor);
 
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
@@ -122,13 +111,10 @@ int main(){
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
 
-            if(!superstop){
-                if(mCurrentFloor != -1){
+            if(!superstop && mCurrentFloor != -1){
                     elevio_motorDirection(mDirection);
                 }
             }
-        }
-
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
@@ -164,14 +150,6 @@ int main(){
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
                 mStopCounter = 0;
-
-                if(mQueue.head->pNextRequest != mQueue.tail){
-                    Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
-                    
-                    if(!superstop){
-                    elevio_motorDirection(mDirection);
-                    }
-                }
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
@@ -215,7 +193,7 @@ int main(){
                 }  
         }
         
-        nanosleep(&(struct timespec){0, 50*1000*1000}, NULL);
+        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");

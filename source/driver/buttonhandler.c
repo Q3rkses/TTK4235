@@ -78,6 +78,13 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
         return NULL;
     }
 
+void Buttonhandler_init(Buttonhandler *buttonhandler){
+    Turn_Off_Stop_Button_Lamp();
+    buttonhandler->StopBtnState = false;
+    buttonhandler->ObstructionBtnState = false;
+    printf("------------------------- Buttonhandler initialized -------------------------\n");
+}
+
 double Evaluate_Current_Floor(MotorDirection direction, int LastKnownFloor){
     
     if (direction == DIRN_UP){
