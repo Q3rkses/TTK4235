@@ -77,3 +77,16 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
         }
         return NULL;
     }
+
+double Evaluate_Current_Floor(MotorDirection direction, int LastKnownFloor){
+    
+    if (direction == DIRN_UP){
+        return LastKnownFloor + 0.5;
+    }
+    else if (direction == DIRN_DOWN){
+        return LastKnownFloor - 0.5;
+    }
+    else{
+        return LastKnownFloor;
+    }
+}
