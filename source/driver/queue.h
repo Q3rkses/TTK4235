@@ -30,8 +30,8 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
 
 /** 
  * @brief Where_To_Attach_Request function
- * @param attachBefore, attachBefore parameter is planned to be true
- * @return pPrevRequest to indicate to assert the request after pPrevRequest in Queue
+ * @param attachBefore, attachBefore can be true or false, it does not matter
+ * @return Directly returns a request pointer and changes attachBefore pointer accordingly to ensure correct assertion of request to queue
 */
 Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFloor, bool *attachBefore);
 
