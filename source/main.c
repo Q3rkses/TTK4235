@@ -93,14 +93,6 @@ int main(){
             Attach_Request_To_Queue(pRequest, &mQueue, mCurrentFloor);
         }
 
-        /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
-        if(mQueue.head->pNextRequest != mQueue.tail){
-            Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
-            if (superstop == false) {
-                elevio_motorDirection(mDirection);
-                }
-        }
-
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             elevio_motorDirection(DIRN_STOP);
@@ -118,11 +110,22 @@ int main(){
                 for(int i = 0; i < 3; i++){
                     Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
                 }
-                Door_Close(&door);
+                if (!elevio_obstruction()){
+                    Door_Close(&door);
+                    superstop = false;
+                }
                 mTimerCounter = 0;
-                superstop = false;
             }
         }
+
+        /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
+        else if(mQueue.head->pNextRequest != mQueue.tail){
+            Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
+            if (superstop == false) {
+                elevio_motorDirection(mDirection);
+            }
+        }
+
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
@@ -201,7 +204,7 @@ int main(){
                 }  
         }
         
-        nanosleep(&(struct timespec){0, 20*100*100}, NULL);
+        nanosleep(&(struct timespec){0, 50*1000*1000}, NULL);
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
