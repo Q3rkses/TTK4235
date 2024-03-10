@@ -67,7 +67,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
                 requestInElevatorsWay = true;
             }
-            if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
+            if (requestInElevatorsWay) {
                 *attachBefore = true;
                 return iteratorNode;
             }
