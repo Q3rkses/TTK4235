@@ -58,9 +58,7 @@ int main(){
         int mCurrentFloor = elevio_floorSensor();
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
-       
-
-        /**Elevator Light position*/
+  
         if(mCurrentFloor == 0){
             elevio_floorIndicator(0);
 
@@ -84,10 +82,14 @@ int main(){
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
-            if (mCurrentFloor != -1 && superstop == false) {
+            if (mCurrentFloor == -1 && superstop == false) {
                 elevio_motorDirection(mDirection);
+                }
+
+            if (mCurrentFloor != -1 && superstop == false) {
+                elevio_motorDirection(DIRN_DOWN);
+                }
             }
-        }
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
@@ -100,6 +102,7 @@ int main(){
                 mTimerCounter++;
             }
 
+            /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
             if (get_elapsed_time(mTime) > 2){
                 for(int i = 0; i < 3; i++){
                     Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
@@ -134,7 +137,7 @@ int main(){
         buttonhandler.ObstructionBtnState = false;
         
         
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+        nanosleep(&(struct timespec){0, 20*100*100}, NULL);
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
