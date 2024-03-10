@@ -70,8 +70,6 @@ int main(){
         if (mCurrentFloor != -1){
             mTempFloor = mCurrentFloor;
         }
-
-        printf("%d",Evaluate_Current_Floor(mDirection, mTempFloor));
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
   
@@ -97,8 +95,8 @@ int main(){
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         if(mQueue.head->pNextRequest != mQueue.tail){
-            Set_Elevator_Direction((mQueue.head->pNextRequest), mCurrentFloor, &mDirection);
-            if (mCurrentFloor != -1 && superstop == false) {
+            Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
+            if (superstop == false) {
                 elevio_motorDirection(mDirection);
                 }
         }
