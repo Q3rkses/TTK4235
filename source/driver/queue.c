@@ -199,7 +199,14 @@ void Empty_Queue(Queue *queue, Elevatorpanel *panel){
         }
         Delete_From_Queue(iteratorNode->pPrevRequest, queue);
     }
-    Elevatorpanel_init(&panel);
+
+    /**MAKES ALL BUTTON GO VANISH*/
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 3; j++){
+            panel->PanelButtonState[i][j] = 0;
+            Turn_Off_Elevator_Button_Lamp(i, j);
+        }
+    }
 }
 
 void Queue_Print(Queue *pQueue){
