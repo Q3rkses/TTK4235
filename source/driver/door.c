@@ -17,5 +17,7 @@ void Door_init(Door *door){
 }
 
 void Floor_Light(int floor){
+    if (floor != -1){
         elevio_floorIndicator(floor);
+    }
 }
