@@ -192,13 +192,14 @@ void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door, E
     }
 }
 
-void Empty_Queue(Queue *queue){
+void Empty_Queue(Queue *queue, Elevatorpanel *panel){
     for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
         if (iteratorNode->pPrevRequest == queue->head) {
             continue;
         }
         Delete_From_Queue(iteratorNode->pPrevRequest, queue);
     }
+    Elevatorpanel_init(&panel);
 }
 
 void Queue_Print(Queue *pQueue){

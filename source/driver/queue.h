@@ -43,6 +43,6 @@ void Delete_From_Queue(Request *request, Queue *queue);
 
 void Automatic_Deletion_From_Queue(Queue *queue, int mCurrentFloor, Door door, Elevatorpanel *panel);
 
-void Empty_Queue(Queue *queue);
+void Empty_Queue(Queue *queue, Elevatorpanel *panel);
 
 void Queue_Print(Queue *pQueue);

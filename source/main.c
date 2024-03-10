@@ -98,8 +98,9 @@ int main(){
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             elevio_motorDirection(DIRN_STOP);
-            Door_Open(&door);
             superstop = true;
+            Door_Open(&door);
+
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
@@ -125,6 +126,7 @@ int main(){
 
             if (mStopCounter == 0){
                 /**Set all the correct states for variables*/
+                Empty_Queue(&mQueue, &panel);
                 superstop = true;
                 mTimerCounter = 0;
                 mTempDirection = mDirection;
@@ -167,7 +169,7 @@ int main(){
             
         }
         
-        /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
+        /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_obstruction()){
             /**If the elevator is on a floor the door shall remain open untill it is no longer obstructed*/
             if (mCurrentFloor != -1){
@@ -214,6 +216,6 @@ int main(){
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
-    Empty_Queue(&mQueue);
+    Empty_Queue(&mQueue, &panel);
     return 0;
 }
