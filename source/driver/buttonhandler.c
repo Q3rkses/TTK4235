@@ -56,7 +56,7 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
             
     /**------------------------- ELEVATOR BUTTON MATRIX (FLOOR LIGHT SYS) -------------------------*/
             if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 0 && (b*5+f) != (*btntype*5 + *floor)){
+                if (panel->PanelButtonState[f][b] == 0){
                         Turn_On_Elevator_Button_Lamp(f, b);
                         panel->PanelButtonState[f][b] = 1;
                         printf(" Setting light %d, %d to high \n", f, b);
@@ -73,21 +73,6 @@ Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btnty
                         return pReq;
                     }
                 }
-            
-
-            /** if (btnPressed == 1){
-                if (panel->PanelButtonState[f][b] == 1 && (5*b+f) != (*btntype*5 + *floor)){
-                    Turn_Off_Elevator_Button_Lamp(f, b);
-                    panel->PanelButtonState[f][b] = 0;
-                    printf(" Setting light %d, %d to low \n", f, b);
-
-                    /**RETURNS
-                    *btntype = b;
-                    *floor = f;
-
-                    Request req = Request_Init(f, b, false);
-                    }
-                } */
             }
         }
         return NULL;
