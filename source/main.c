@@ -195,9 +195,15 @@ int main(){
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
                     Door_Close(&door);
+                    
+                    /**------------------------- FEMOVE THE BREAK WHEN FINISHED -------------------------*/
+                    break;
                 } else {
                     /**If not on a floor continue in the same direction as before after 3 seconds*/
                     elevio_motorDirection(mTempDirection);
+                    
+                    /**------------------------- REMOVE BREAK WHEN FINISHED -------------------------*/
+                    break;
                 }
             }
             
