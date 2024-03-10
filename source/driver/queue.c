@@ -61,7 +61,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return iteratorNode;
+                return queue->tail;
             }
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
@@ -77,7 +77,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return iteratorNode;
+                return queue->tail;
             }
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
@@ -94,7 +94,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, int mCurrentFlo
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
                 *attachBefore = true;
-                return iteratorNode;
+                return queue->tail;
             }
             bool requestInElevatorsWay = false;
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
