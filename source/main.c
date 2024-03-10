@@ -38,6 +38,7 @@ int main(){
     int mObstructionCounter = 0;
     int mStopCounter = 0;
     int mTempDirection = 0;
+    int mTempFloor = 0;
 
     /**INITIALIZE STRUCTS*/
     elevio_init();
@@ -65,6 +66,12 @@ int main(){
     
         /**------------------------- SENSOR INFORMATION -------------------------*/
         int mCurrentFloor = elevio_floorSensor();
+        
+        if (mCurrentFloor != -1){
+            mTempFloor = mCurrentFloor;
+        }
+
+        printf("%d",Evaluate_Current_Floor(mDirection, mTempFloor));
         
         /**------------------------- FLOOR INDICATOR -------------------------*/
   
