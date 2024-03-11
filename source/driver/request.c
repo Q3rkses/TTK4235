@@ -28,7 +28,5 @@ void Set_Elevator_Direction(Request *request, int currFloor, ButtonType *directi
             *direction = DIRN_UP;
         } else if(request->floor < currFloor){
             *direction = DIRN_DOWN;
-        } else {
-            *direction = DIRN_STOP;
         }
     }
