@@ -144,9 +144,10 @@ int main(){
 
         }
 
-        /** Sleep for 1 second after button released then continue*/
+        /** Sleep for 3 second after button released then continue*/
         if (mStopCounter > 0 && !elevio_stopButton()){
             if (mTimerCounter == 0){
+                Turn_Off_Stop_Button_Lamp();
                 mTime = get_current_time();
                 mTimerCounter++;
             }
@@ -155,7 +156,6 @@ int main(){
                 /**Setting the correct states for variables*/
                 superstop = false;
                 buttonhandler.StopBtnState = false;
-                Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
                 mStopCounter = 0;
                 mBetweenCounter = 1;
