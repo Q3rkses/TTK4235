@@ -86,14 +86,16 @@ int main(){
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
-            elevio_motorDirection(DIRN_STOP);
             superstop = true;
+            elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
 
             
             if (mTimerCounter == 0){
                 mTime = get_current_time();
                 mTimerCounter++;
+
+                printf("ON FLOOR: %d \n", mCurrentFloor);
             }
 
             /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
