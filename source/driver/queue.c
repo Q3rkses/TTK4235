@@ -62,18 +62,22 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         printf("-------------------THIS REQUEST IS FROM CABIN-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             if (iteratorNode->direction != BUTTON_CAB && superstop) {
+                printf("-------------------ATTACHING before ITNODE-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             } else if (iteratorNode->direction != BUTTON_CAB && !superstop) {
+                printf("-------------------ATTACHING after ITNODE-----------------------\n\n");
                 *attachBefore = false;
                 return iteratorNode;
             }
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
             || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                printf("-------------------PrOpEr, CABIN-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -83,15 +87,17 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         printf("-------------------THIS REQUEST IS FROM HALL, UPWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
-            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor < iteratorNode->floor) && (request->floor > mCurrentFloor)) {
+                printf("-------------------request in way, UPWARDS-----------------------\n\n");
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
+                printf("-------------------PrOpEr, UP-----------------------\n\n")
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -102,15 +108,17 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         printf("-------------------THIS REQUEST IS FROM HALL, DOWNWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
-            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor > iteratorNode->floor) && (request->floor < mCurrentFloor)) {
+                printf("-------------------request in way, DOWNWARDS-----------------------\n\n");
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_DOWN && requestInElevatorsWay) {
+                printf("-------------------PrOpEr, DOWN-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
