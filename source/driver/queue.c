@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop, MotorDirection mDirection){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, MotorDirection mDirection, int betweenFloors){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloo
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop, mDirection);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, mDirection, betweenFloors);
     if (attachBefore) {
         Attach_Before_This(pThis, request, queue);
     } else {
@@ -139,7 +139,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
 }
 */
 
-Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, bool superstop, MotorDirection mDirection) {
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, MotorDirection mDirection, int betweenFloors) {
     if (request->floor > mCurrentFloor) {
         mDirection = DIRN_UP;
     } else if (request->floor < mCurrentFloor) {
@@ -156,6 +156,9 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                     if (request->floor > it->floor) {
                         printf("------------------------------DOWN, CAB IF---------------------------------\n\n");
                         *attachBefore = true;
+                        if (betweenFloors == -1) {
+                            *attachBefore = false;
+                        }
                         return it;
                     }
                 }
@@ -180,6 +183,9 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                     if (request->floor > it->floor) {
                         printf("------------------------------DOWN, DOWN IF---------------------------------\n\n");
                         *attachBefore = true;
+                        if (betweenFloors == -1) {
+                            *attachBefore = false;
+                        }
                         return it;
                     }
                 }
@@ -199,6 +205,9 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 printf("------------------------------UP, CAB IF---------------------------------\n\n");
                 if (request->floor < it->floor) {
                     *attachBefore = true;
+                    if (betweenFloors == -1) {
+                            *attachBefore = false;
+                    }
                     return it;
                 }
             }
@@ -211,6 +220,9 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 printf("------------------------------UP, UP IF---------------------------------\n\n");
                 if (request->floor < it->floor) {
                     *attachBefore = true;
+                    if (betweenFloors == -1) {
+                            *attachBefore = false;
+                    }
                     return it;
                 }
             }
@@ -223,6 +235,9 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                     if (request->floor > it->floor) {
                         printf("------------------------------UP, DOWN IF---------------------------------\n\n");
                         *attachBefore = true;
+                        if (betweenFloors == -1) {
+                            *attachBefore = false;
+                        }
                         return it;
                     }
                 }
