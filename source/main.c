@@ -84,7 +84,7 @@ int main(){
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
         if(pRequest != NULL){
-            Attach_Request_To_Queue(pRequest, &mQueue, Evaluate_Current_Floor(mDirection, mTempFloor), superstop, mDirection);
+            Attach_Request_To_Queue(pRequest, &mQueue, Evaluate_Current_Floor(mDirection, mTempFloor), mDirection, mCurrentFloor);
         }
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
