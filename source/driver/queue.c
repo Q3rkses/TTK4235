@@ -97,7 +97,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
-                printf("-------------------PrOpEr, UP-----------------------\n\n")
+                printf("-------------------PrOpEr, UP-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
