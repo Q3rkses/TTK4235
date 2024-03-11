@@ -83,7 +83,7 @@ int main(){
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
-        if(pRequest != NULL){
+        if(pRequest != NULL && buttonhandler.StopBtnState == false){
             Attach_Request_To_Queue(pRequest, &mQueue, mCurrentFloor, superstop);
         }
 
@@ -158,7 +158,7 @@ int main(){
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
                 mStopCounter = 0;
-                mBetweenCounter = 0;
+                mBetweenCounter = 1;
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
