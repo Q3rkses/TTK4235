@@ -44,16 +44,17 @@ void Stop_Button(Queue *mQueue, Buttonhandler *buttonhandler, Elevatorpanel *pan
 }
 
 void Move_To_Fulfill_Requests(Queue *mQueue, int *mDirection, int mTempFloor, int mCurrentFloor, bool *superstop, int *mBetweenCounter){
+    
     if(mQueue->head->pNextRequest != mQueue->tail){
-        Set_Elevator_Direction((mQueue->head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), mDirection);
+        Set_Elevator_Direction((mQueue->head->pNextRequest), Evaluate_Current_Floor((*mDirection), mTempFloor), mDirection);
 
         if(!(*superstop) && mCurrentFloor != -1){
-                elevio_motorDirection(mDirection);
+                elevio_motorDirection((*mDirection));
             }
         
         if (mBetweenCounter > 0 && !(*superstop)){
-            if(mDirection != DIRN_STOP){
-                        elevio_motorDirection(mDirection);
+            if((*mDirection) != DIRN_STOP){
+                        elevio_motorDirection((*mDirection));
                         (*mBetweenCounter) = 0;
                         (*superstop) = false;
                     }
