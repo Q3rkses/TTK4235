@@ -150,14 +150,25 @@ int main(){
                 buttonhandler.StopBtnState = false;
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
-                mStopCounter = 0;
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
+                    if(!elevio_obstruction()){
                     Door_Close(&door);
+                    }
                 }
             }
         }
+
+        /** Start going in the supposed direction even when between floors after a stop*/
+        if (mStopCounter > 0 && !superstop){
+            if(mQueue.head->pNextRequest != mQueue.tail){
+            Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
+            elevio_motorDirection(mDirection);
+            mStopCounter = 0;
+            }  
+        }
+
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         
         if (door.isOpen == true){
