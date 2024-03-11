@@ -75,12 +75,20 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 *attachBefore = false;
                 return iteratorNode;
             }
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
-            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
-                printf("-------------------PrOpEr, CABIN-----------------------\n\n");
-                *attachBefore = true;
-                return iteratorNode;
+            if (elevatorDirn == DIRN_UP) {
+                if ((request->floor < iteratorNode->floor) && (request->floor > mCurrentFloor)) {
+                    printf("-------------------PrOpEr, CABIN, DIRN_UP-----------------------\n\n");
+                    *attachBefore = true;
+                    return iteratorNode;
+                }
+            } else if (elevatorDirn == DIRN_DOWN) {
+                if ((request->floor > iteratorNode->floor) && (request->floor < mCurrentFloor)) {
+                    printf("-------------------PrOpEr, CABIN, DIRN_DOWN-----------------------\n\n");
+                    *attachBefore = true;
+                    return iteratorNode;
+                }
             }
+            
         }
         break;
     case BUTTON_HALL_UP: // Upwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
