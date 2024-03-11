@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop, MotorDirection mDirection){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
