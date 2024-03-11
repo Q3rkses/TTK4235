@@ -156,7 +156,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                     if (request->floor > it->floor) {
                         printf("------------------------------DOWN, CAB IF---------------------------------\n\n");
                         *attachBefore = true;
-                        if (betweenFloors == -1) {
+                        if (betweenFloors == -1 /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
                             *attachBefore = false;
                         }
                         return it;
