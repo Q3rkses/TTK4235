@@ -55,24 +55,29 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
     }
     switch (request->direction)
     {
-        // CABIN DONT WORK, OBST AND STOPTBN NOT FULLY IMPLEMENTED
+        // CABIN DONT WORK, STOPBTN not working when elevator is stopbtn is activated between floors
+        // requests get added before tail even if they should be added before
         // WHEN DELETING REQ, DIRN MUST BE TAKEN INTO CONSIDERATION
     case BUTTON_CAB: // Request from inside the elevator. If there is a request from outside, which is in your path and is in the same direction add after that
         printf("-------------------THIS REQUEST IS FROM CABIN-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             if (iteratorNode->direction != BUTTON_CAB && superstop) {
+                printf("-------------------ATTACHING before ITNODE-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             } else if (iteratorNode->direction != BUTTON_CAB && !superstop) {
+                printf("-------------------ATTACHING after ITNODE-----------------------\n\n");
                 *attachBefore = false;
                 return iteratorNode;
             }
             if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
             || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+                printf("-------------------PrOpEr, CABIN-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
@@ -82,34 +87,38 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         printf("-------------------THIS REQUEST IS FROM HALL, UPWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
-            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor < iteratorNode->floor) && (request->floor > mCurrentFloor)) {
+                printf("-------------------request in way, UPWARDS-----------------------\n\n");
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_UP && requestInElevatorsWay) {
+                printf("-------------------PrOpEr, UP-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
         }
         break;
-        // THIS DONT WORK
+        // THIS WORKS IF UP ISNT PRIORITIZED THIS IS A PROBLEM OF COURSE
     case BUTTON_HALL_DOWN: // Downwards request from outside the elevator. Oldest prioritized. Exeption: if the request from outside is in your path and is in the same direction
         printf("-------------------THIS REQUEST IS FROM HALL, DOWNWARDS-----------------------\n\n");
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode == queue->tail) {
+                printf("-------------------ATTACHING BEFORE TAIL!!-----------------------\n\n");
                 *attachBefore = true;
                 return queue->tail;
             }
             bool requestInElevatorsWay = false;
-            if ((request->floor < iteratorNode->floor && request->floor > mCurrentFloor) 
-            || (request->floor > iteratorNode->floor && request->floor < mCurrentFloor)) {
+            if ((request->floor > iteratorNode->floor) && (request->floor < mCurrentFloor)) {
+                printf("-------------------request in way, DOWNWARDS-----------------------\n\n");
                 requestInElevatorsWay = true;
             }
             if (elevatorDirn == DIRN_DOWN && requestInElevatorsWay) {
+                printf("-------------------PrOpEr, DOWN-----------------------\n\n");
                 *attachBefore = true;
                 return iteratorNode;
             }
