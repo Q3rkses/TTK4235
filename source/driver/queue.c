@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, bool superstop, MotorDirection mDirection){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloo
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop, mDirection);
     if (attachBefore) {
         Attach_Before_This(pThis, request, queue);
     } else {
@@ -45,7 +45,7 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue){
     }
     return false;
 }
-
+/*
 Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, bool superstop){
     MotorDirection elevatorDirn;
     if (request->floor - mCurrentFloor > 0) {
@@ -134,6 +134,39 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         break;
     default:
         printf("------------------------------DEFAULT IN SWITCH CASE ACTIVATED. BAD!---------------------------------\n\n");
+        break;
+    }
+}
+*/
+
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, bool superstop, MotorDirection mDirection) {
+    switch (mDirection)
+    {
+    case DIRN_DOWN:
+        if (request->direction == DIRN_DOWN || request->direction == DIRN_STOP) {
+            for (Request *it = queue->head->pNextRequest; it != NULL; it = it->pNextRequest) {
+                if ((request->floor > it->floor) && (request->floor < mCurrentFloor)) {
+                    *attachBefore = true;
+                    return it;
+                }
+            }
+        }
+        *attachBefore = true;
+        return queue->tail;
+        break;
+    case DIRN_UP:
+        if (request->direction == DIRN_UP || request->direction == DIRN_STOP) {
+            for (Request *it = queue->head->pNextRequest; it != NULL; it = it->pNextRequest) {
+                if ((request->floor < it->floor) && (request->floor > mCurrentFloor)) {
+                    *attachBefore = true;
+                    return it;
+                }
+            }
+        }
+        *attachBefore = true;
+        return queue->tail;
+        break;
+    default:
         break;
     }
 }
