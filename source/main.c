@@ -12,7 +12,6 @@
 #include "driver/request.h"
 #include "driver/queue.h"
 #include "driver/timer.h"
-#include "driver/shortcuts.h"
 
 
 
@@ -39,6 +38,7 @@ int main(){
     int mObstructionCounter = 0;
     int mStopCounter = 0;
     int mTempDirection = 0;
+    int mBetweenCounter = 0;
     int mTempFloor = 0;
 
     /**INITIALIZE STRUCTS*/
@@ -61,6 +61,10 @@ int main(){
     }
 
     printf("\n------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
+
+    for (int x = 0; x < 5; x++){
+        printf("...\n");
+    }
 
     Queue_Print(&mQueue);
 
@@ -85,8 +89,8 @@ int main(){
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
-            elevio_motorDirection(DIRN_STOP);
             superstop = true;
+            elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
 
             
@@ -109,6 +113,9 @@ int main(){
         }
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
+        
+        /**Move_To_Fulfill_Requests(&mQueue, &mDirection, mTempFloor, mCurrentFloor, &superstop, &mBetweenCounter);*/
+        
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
 
@@ -150,6 +157,8 @@ int main(){
                 buttonhandler.StopBtnState = false;
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
+                mStopCounter = 0;
+                mBetweenCounter = 1;
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
@@ -160,12 +169,16 @@ int main(){
             }
         }
 
-        /** Start going in the supposed direction even when between floors after a stop*/
-        if (mStopCounter > 0 && !superstop){
+        /** Start going in the supposed direction even when between floors after a stop */
+        
+        if (mBetweenCounter > 0 && !superstop){
             if(mQueue.head->pNextRequest != mQueue.tail){
-            Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
-            elevio_motorDirection(mDirection);
-            mStopCounter = 0;
+                Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
+                
+                if(mDirection != DIRN_STOP){
+                    elevio_motorDirection(mDirection);
+                    mBetweenCounter = 0;
+                }
             }  
         }
 
@@ -173,9 +186,9 @@ int main(){
         
         if (door.isOpen == true){
             if(elevio_obstruction()){
+                superstop = true;
                 if (mObstructionCounter == 0){
                     /**Set all the correct states for variables*/
-                    superstop = true;
                     mTimerCounter = 0;
                     mTempDirection = mDirection;
                     mObstructionCounter++;
@@ -203,7 +216,7 @@ int main(){
                 }  
         }
         
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+        nanosleep(&(struct timespec){0, 50*100*100}, NULL);
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
