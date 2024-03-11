@@ -23,7 +23,7 @@ bool Request_Is_Getting_Off(Request request) {
     return request.off;
 }
 
-void Set_Elevator_Direction(Request *request, int currFloor, ButtonType *direction) { 
+void Set_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction) { 
     if(request->floor > currFloor){
             *direction = DIRN_UP;
         } else if(request->floor < currFloor){

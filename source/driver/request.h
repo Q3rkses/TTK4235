@@ -61,4 +61,4 @@ bool Request_Is_Getting_Off(Request request);
  * @param currFloor the current floor of the elevator.
  * @param direction the direction of the elevator (global variable gets changed instead of a return).
 */
-void Set_Elevator_Direction(Request *request, int currFloor, ButtonType *direction);
+void Set_Elevator_Direction(Request *request, int currFloor, MotorDirection *direction);
