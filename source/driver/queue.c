@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloo
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, superstop, mDirection);
     if (attachBefore) {
         Attach_Before_This(pThis, request, queue);
     } else {
