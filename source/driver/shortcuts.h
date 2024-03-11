@@ -8,6 +8,7 @@
 #include "elevio.h"
 #include "request.h"
 
+
 /**
  * @brief This function stops the elevator and opens the door when the stop button is pressed
  * @param mQueue the queue of requests
@@ -22,3 +23,5 @@
  * @return void
 */
 void Stop_Button(Queue *mQueue, Buttonhandler *buttonhandler, Elevatorpanel *panel, Door *door, bool *superstop, int *mTimerCounter, int *mStopCounter, time_t *mTime, int *mCurrentFloor);
+
+void Move_To_Fulfill_Requests(Queue *mQueue, int *mDirection, int mTempFloor, int mCurrentFloor, bool *superstop, int *mBetweenCounter);
