@@ -140,6 +140,11 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
 */
 
 Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, bool superstop, MotorDirection mDirection) {
+    if (request->floor > mCurrentFloor) {
+        mDirection = DIRN_UP;
+    } else if (request->floor < mCurrentFloor) {
+        mDirection = DIRN_DOWN;
+    }
     switch (mDirection)
     {
     case DIRN_DOWN:
