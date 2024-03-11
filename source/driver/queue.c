@@ -170,7 +170,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                     printf("------------------------------DOWN, UP IF---------------------------------\n\n");
                     if (request->floor < it->floor) {
-                        *attachBefore = true;
+                        *attachBefore = false;
                         return it;
                     }
                 }
@@ -206,7 +206,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 if (request->floor < it->floor) {
                     *attachBefore = true;
                     if (betweenFloors == -1) {
-                            *attachBefore = false;
+                        *attachBefore = false;
                     }
                     return it;
                 }
@@ -221,7 +221,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 if (request->floor < it->floor) {
                     *attachBefore = true;
                     if (betweenFloors == -1) {
-                            *attachBefore = false;
+                        *attachBefore = false;
                     }
                     return it;
                 }
