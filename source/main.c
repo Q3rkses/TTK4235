@@ -12,7 +12,6 @@
 #include "driver/request.h"
 #include "driver/queue.h"
 #include "driver/timer.h"
-#include "driver/shortcuts.h"
 
 
 
@@ -63,6 +62,10 @@ int main(){
 
     printf("\n------------------------- ELEVATOR AT STARTING POSITION -------------------------\n\n\n");
 
+    for (int x = 0; x < 5; x++){
+        printf("...\n");
+    }
+
     Queue_Print(&mQueue);
 
     while(1){
@@ -80,7 +83,7 @@ int main(){
 
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
-        if(pRequest != NULL){
+        if(pRequest != NULL && buttonhandler.StopBtnState == false){
             Attach_Request_To_Queue(pRequest, &mQueue, mCurrentFloor, superstop);
         }
 
@@ -94,8 +97,6 @@ int main(){
             if (mTimerCounter == 0){
                 mTime = get_current_time();
                 mTimerCounter++;
-
-                printf("ON FLOOR: %d \n", mCurrentFloor);
             }
 
             /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
@@ -157,7 +158,7 @@ int main(){
                 Turn_Off_Stop_Button_Lamp();
                 mTimerCounter = 0;
                 mStopCounter = 0;
-                mBetweenCounter = 0;
+                mBetweenCounter = 1;
 
                 if(mCurrentFloor != -1){
                     /**If the elevator is at a floor hold the door open and close after 3 seconds*/
@@ -177,7 +178,6 @@ int main(){
                 if(mDirection != DIRN_STOP){
                     elevio_motorDirection(mDirection);
                     mBetweenCounter = 0;
-                    superstop = false;
                 }
             }  
         }
@@ -186,9 +186,9 @@ int main(){
         
         if (door.isOpen == true){
             if(elevio_obstruction()){
+                superstop = true;
                 if (mObstructionCounter == 0){
                     /**Set all the correct states for variables*/
-                    superstop = true;
                     mTimerCounter = 0;
                     mTempDirection = mDirection;
                     mObstructionCounter++;
@@ -216,7 +216,7 @@ int main(){
                 }  
         }
         
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+        nanosleep(&(struct timespec){0, 50*100*100}, NULL);
     }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
