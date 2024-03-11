@@ -143,9 +143,11 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
     switch (mDirection)
     {
     case DIRN_DOWN:
+    printf("------------------------------DOWN---------------------------------\n\n");
         if (request->direction == DIRN_DOWN || request->direction == DIRN_STOP) {
-            for (Request *it = queue->head->pNextRequest; it != NULL; it = it->pNextRequest) {
+            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                 if ((request->floor > it->floor) && (request->floor < mCurrentFloor)) {
+                    printf("------------------------------DOWN IF---------------------------------\n\n");
                     *attachBefore = true;
                     return it;
                 }
@@ -155,8 +157,10 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         return queue->tail;
         break;
     case DIRN_UP:
+    printf("------------------------------UP---------------------------------\n\n");
         if (request->direction == DIRN_UP || request->direction == DIRN_STOP) {
-            for (Request *it = queue->head->pNextRequest; it != NULL; it = it->pNextRequest) {
+            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                printf("------------------------------UP IF---------------------------------\n\n");
                 if ((request->floor < it->floor) && (request->floor > mCurrentFloor)) {
                     *attachBefore = true;
                     return it;
@@ -167,6 +171,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         return queue->tail;
         break;
     default:
+    printf("------------------------------DEFAULT BAD!---------------------------------\n\n");
         break;
     }
 }
