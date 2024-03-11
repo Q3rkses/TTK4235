@@ -110,6 +110,9 @@ int main(){
         }
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
+        Move_To_Fulfill_Requests(&mQueue, &mDirection, mTempFloor, mCurrentFloor, &superstop, &mBetweenCounter);
+        
+        /**
         if(mQueue.head->pNextRequest != mQueue.tail){
             Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
 
@@ -117,6 +120,7 @@ int main(){
                     elevio_motorDirection(mDirection);
                 }
             }
+        */
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
@@ -163,18 +167,19 @@ int main(){
             }
         }
 
-        /** Start going in the supposed direction even when between floors after a stop*/
+        /** Start going in the supposed direction even when between floors after a stop
         if (mBetweenCounter > 0 && !superstop){
             if(mQueue.head->pNextRequest != mQueue.tail){
                 Set_Elevator_Direction((mQueue.head->pNextRequest), Evaluate_Current_Floor(mDirection, mTempFloor), &mDirection);
                 
                 if(mDirection != DIRN_STOP){
                     elevio_motorDirection(mDirection);
-                    mBetweenCounter= 0;
+                    mBetweenCounter = 0;
                     superstop = false;
                 }
             }  
         }
+        */
 
         /**------------------------- OBSTRUCTION BUTTON FUNCTIONALITY -------------------------*/
         
