@@ -143,35 +143,95 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
     switch (mDirection)
     {
     case DIRN_DOWN:
-    printf("------------------------------DOWN---------------------------------\n\n");
-        if (request->direction == DIRN_DOWN || request->direction == DIRN_STOP) {
-            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
-                if ((request->floor > it->floor) && (request->floor < mCurrentFloor)) {
-                    printf("------------------------------DOWN IF---------------------------------\n\n");
-                    *attachBefore = true;
-                    return it;
+        switch (request->direction)
+        {
+            case BUTTON_CAB:
+                printf("------------------------------DOWN, CAB---------------------------------\n\n");
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    if (request->floor > it->floor) {
+                        printf("------------------------------DOWN, CAB IF---------------------------------\n\n");
+                        *attachBefore = true;
+                        return it;
+                    }
                 }
-            }
+                *attachBefore = true;
+                return queue->tail;
+                break;
+            case BUTTON_HALL_UP:
+                printf("------------------------------DOWN, UP---------------------------------\n\n");
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    printf("------------------------------DOWN, UP IF---------------------------------\n\n");
+                    if (request->floor < it->floor) {
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
+                break;
+            case BUTTON_HALL_DOWN:
+                printf("------------------------------DOWN, DOWN---------------------------------\n\n");
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    if (request->floor > it->floor) {
+                        printf("------------------------------DOWN, DOWN IF---------------------------------\n\n");
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
+                break;
+            default:
+                break;
         }
-        *attachBefore = true;
-        return queue->tail;
         break;
     case DIRN_UP:
-    printf("------------------------------UP---------------------------------\n\n");
-        if (request->direction == DIRN_UP || request->direction == DIRN_STOP) {
+        switch (request->direction)
+    {
+        case BUTTON_CAB:
+            printf("------------------------------UP, CAB---------------------------------\n\n");
             for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
-                printf("------------------------------UP IF---------------------------------\n\n");
-                if ((request->floor < it->floor) && (request->floor > mCurrentFloor)) {
+                printf("------------------------------UP, CAB IF---------------------------------\n\n");
+                if (request->floor < it->floor) {
                     *attachBefore = true;
                     return it;
                 }
             }
-        }
-        *attachBefore = true;
-        return queue->tail;
+            *attachBefore = true;
+            return queue->tail;
+            break;
+        case BUTTON_HALL_UP:
+            printf("------------------------------UP, UP---------------------------------\n\n");
+            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                printf("------------------------------UP, UP IF---------------------------------\n\n");
+                if (request->floor < it->floor) {
+                    *attachBefore = true;
+                    return it;
+                }
+            }
+            *attachBefore = true;
+            return queue->tail;
+            break;
+        case BUTTON_HALL_DOWN:
+            printf("------------------------------UP, DOWN---------------------------------\n\n");
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    if (request->floor > it->floor) {
+                        printf("------------------------------UP, DOWN IF---------------------------------\n\n");
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
+            break;
+        default:
+            break;
+    }
         break;
     default:
-    printf("------------------------------DEFAULT BAD!---------------------------------\n\n");
+        printf("------------------------------DEFAULT BAD!---------------------------------\n\n");
+        *attachBefore = true;
+        return queue->tail;
         break;
     }
 }
