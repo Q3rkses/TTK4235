@@ -32,6 +32,7 @@ int main(){
     MotorDirection mDirection = DIRN_STOP;
     time_t mTime = get_current_time();
     bool superstop = false;
+    bool mElevMoving = false;
 
     /**COUNTERS AND TEMP VALUES*/
     int mTimerCounter = 0;
@@ -84,12 +85,13 @@ int main(){
         /**------------------------- CHECK ELEVATOR PANEL BUTTONS -------------------------*/
         pRequest = Update_Button_Press(&panel, &mFloor, &mButtonType);
         if(pRequest != NULL){
-            Attach_Request_To_Queue(pRequest, &mQueue, Evaluate_Current_Floor(mDirection, mTempFloor), mDirection, mCurrentFloor);
+            Attach_Request_To_Queue(pRequest, &mQueue, Evaluate_Current_Floor(mDirection, mTempFloor), mDirection, mElevMoving);
         }
 
         /**------------------------- REQUEST IS ON DESIRED FLOOR -------------------------*/
         if(mCurrentFloor == mQueue.head->pNextRequest->floor){
             superstop = true;
+            mElevMoving = false;
             elevio_motorDirection(DIRN_STOP);
             Door_Open(&door);
 
@@ -121,6 +123,7 @@ int main(){
 
             if(!superstop && mCurrentFloor != -1){
                     elevio_motorDirection(mDirection);
+                    mElevMoving = true;
                 }
             }
 
