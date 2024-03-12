@@ -151,14 +151,22 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         switch (request->direction)
         {
             case BUTTON_CAB:
-                Request *it = queue->head->pNextRequest;
-                if (mElevMoving /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
+                
+                if (mElevMoving && queue->numberOfNodes >2 /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, CAB, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+                    for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                        if (request->floor > it->floor) {
+                            printf("------------------------------DOWN, CAB IF---------------------------------\n\n");
+                            *attachBefore = true;
+                            return it;
+                        }
+                    }
+                    *attachBefore = true;
+                    return queue->tail;
                 }
                 printf("------------------------------DOWN, CAB---------------------------------\n\n");
-                for (it; it != queue->tail; it = it->pNextRequest) {
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                     if (request->floor > it->floor) {
                         printf("------------------------------DOWN, CAB IF---------------------------------\n\n");
                         *attachBefore = true;
@@ -169,14 +177,21 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
                 break;
             case BUTTON_HALL_UP:
-                Request *it = queue->head->pNextRequest;
-                if (mElevMoving) {
+                if (mElevMoving && queue->numberOfNodes > 2) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, UP, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+                    for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    printf("------------------------------DOWN, UP IF---------------------------------\n\n");
+                        if (request->floor < it->floor) {
+                            *attachBefore = true;
+                            return it;
+                        }
+                    }
+                    *attachBefore = true;
+                    return queue->tail;
                 }
                 printf("------------------------------DOWN, UP---------------------------------\n\n");
-                for (it; it != queue->tail; it = it->pNextRequest) {
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                     printf("------------------------------DOWN, UP IF---------------------------------\n\n");
                     if (request->floor < it->floor) {
                         *attachBefore = true;
@@ -187,14 +202,21 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
                 break;
             case BUTTON_HALL_DOWN:
-                Request *it = queue->head->pNextRequest;
-                if (mElevMoving) {
+                if (mElevMoving && queue->numberOfNodes > 2) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, DOWN, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+                    for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                        if (request->floor > it->floor) {
+                            printf("------------------------------DOWN, DOWN IF---------------------------------\n\n");
+                            *attachBefore = true;
+                            return it;
+                        }
+                    }
+                    *attachBefore = true;
+                    return queue->tail;
                 }
                 printf("------------------------------DOWN, DOWN---------------------------------\n\n");
-                for (it; it != queue->tail; it = it->pNextRequest) {
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                     if (request->floor > it->floor) {
                         printf("------------------------------DOWN, DOWN IF---------------------------------\n\n");
                         *attachBefore = true;
@@ -212,20 +234,24 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         switch (request->direction)
     {
         case BUTTON_CAB:
-            Request *it = queue->head->pNextRequest;
-            if (mElevMoving) {
+            if (mElevMoving && queue->numberOfNodes > 2) {
                     //*attachBefore = false;
                      printf("------------------------------UP, CAB, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+                    for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                printf("------------------------------UP, CAB IF---------------------------------\n\n");
+                    if (request->floor < it->floor) {
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
             }
             printf("------------------------------UP, CAB---------------------------------\n\n");
-            for (it; it != queue->tail; it = it->pNextRequest) {
+            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                 printf("------------------------------UP, CAB IF---------------------------------\n\n");
                 if (request->floor < it->floor) {
                     *attachBefore = true;
-                    if (mElevMoving) {
-                        *attachBefore = false;
-                    }
                     return it;
                 }
             }
@@ -233,14 +259,21 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             return queue->tail;
             break;
         case BUTTON_HALL_UP:
-            Request *it = queue->head->pNextRequest;
-            if (mElevMoving) {
-                    //*attachBefore = false;
-                     printf("------------------------------UP, UP, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+            if (mElevMoving && queue->numberOfNodes > 2) {
+                //*attachBefore = false;
+                printf("------------------------------UP, UP, BETWEEN---------------------------------\n\n");
+                for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                printf("------------------------------UP, UP IF---------------------------------\n\n");
+                    if (request->floor < it->floor) {
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
             }
             printf("------------------------------UP, UP---------------------------------\n\n");
-            for (it; it != queue->tail; it = it->pNextRequest) {
+            for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                 printf("------------------------------UP, UP IF---------------------------------\n\n");
                 if (request->floor < it->floor) {
                     *attachBefore = true;
@@ -251,14 +284,21 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             return queue->tail;
             break;
         case BUTTON_HALL_DOWN:
-            Request *it = queue->head->pNextRequest;
-            if (mElevMoving) {
+            if (mElevMoving && queue->numberOfNodes > 2) {
                     //*attachBefore = false;
-                     printf("------------------------------UP, DOWN, BETWEEN---------------------------------\n\n");
-                    it = queue->head->pNextRequest->pNextRequest;
+                    printf("------------------------------UP, DOWN, BETWEEN---------------------------------\n\n");
+                    for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
+                    if (request->floor > it->floor) {
+                        printf("------------------------------UP, DOWN IF---------------------------------\n\n");
+                        *attachBefore = true;
+                        return it;
+                    }
+                }
+                *attachBefore = true;
+                return queue->tail;
             }
             printf("------------------------------UP, DOWN---------------------------------\n\n");
-                for (it; it != queue->tail; it = it->pNextRequest) {
+                for (Request *it = queue->head->pNextRequest; it != queue->tail; it = it->pNextRequest) {
                     if (request->floor > it->floor) {
                         printf("------------------------------UP, DOWN IF---------------------------------\n\n");
                         *attachBefore = true;
