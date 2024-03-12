@@ -151,8 +151,8 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         switch (request->direction)
         {
             case BUTTON_CAB:
-                
-                if (mElevMoving && queue->numberOfNodes >2 /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
+                // WORKING BUT NOW THE FIRST ONE IS TOTALLY IGNORED SINCE YOU START MOVING IMMEDIATELY
+                if (mElevMoving && queue->numberOfNodes > 2 /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, CAB, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
