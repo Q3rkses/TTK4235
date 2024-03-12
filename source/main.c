@@ -129,13 +129,17 @@ int main(){
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
+            
+            if(mQueue.numberOfNodes > 2){
+                Empty_Queue(&mQueue, &panel);
+            }
+
             if (mCurrentFloor != -1){
                 Door_Open(&door);
             }
 
             if (mStopCounter == 0){
                 /**Set all the correct states for variables*/
-                Empty_Queue(&mQueue, &panel);
                 superstop = true;
                 mTimerCounter = 0;
                 mStopCounter++;
