@@ -178,7 +178,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
                 break;
             case BUTTON_HALL_UP:
-                if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
+                if (mElevMoving && queue->numberOfNodes > 2 && (request->floor == *mFloorLastCompletedRequest || request->floor == mTempFloor)) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, UP, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
