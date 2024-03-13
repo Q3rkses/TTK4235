@@ -33,6 +33,7 @@ int main(){
     time_t mTime = get_current_time();
     bool superstop = false;
     bool mElevMoving = false;
+    int *mFloorLastCompletedRequest;
 
     /**COUNTERS AND TEMP VALUES*/
     int mTimerCounter = 0;
@@ -104,7 +105,7 @@ int main(){
             /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
             if (get_elapsed_time(mTime) > 2){
                 for(int i = 0; i < 3; i++){
-                    Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
+                    Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel, mFloorLastCompletedRequest);
                 }
                 if (!elevio_obstruction()){
                     Door_Close(&door);

@@ -41,7 +41,7 @@ void Attach_After_This(Request *this, Request *requestToAttach, Queue *queue);
 
 void Delete_From_Queue(Request *request, Queue *queue);
 
-void Automatic_Deletion_From_Queue(Queue *queue, double mCurrentFloor, Door door, Elevatorpanel *panel);
+void Automatic_Deletion_From_Queue(Queue *queue, double mCurrentFloor, Door door, Elevatorpanel *panel, int *mFloorLastCompletedRequest);
 
 void Empty_Queue(Queue *queue, Elevatorpanel *panel);
 

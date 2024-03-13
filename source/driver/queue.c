@@ -19,7 +19,7 @@ Queue Queue_Init(Request *head, Request *tail){
     return queue;
 }
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, MotorDirection mDirection, bool mElevMoving){
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, MotorDirection mDirection, bool mElevMoving, int *mFloorLastComletedRequest){
     bool attachBefore = true;
     if (queue->numberOfNodes >= MAX_QUEUE_NODE_AMOUNT) {
         printf("Cannot attach Request because the Queue has %d elements.\n\n", queue->numberOfNodes);
@@ -29,7 +29,7 @@ void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloo
         printf("Won't attach Request because it already exists in Queue.\n\n");
         return;
     }
-    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, mDirection, mElevMoving);
+    Request *pThis = Where_To_Attach_Request(request, queue, mCurrentFloor, &attachBefore, mDirection, mElevMoving, mFloorLastComletedRequest);
     if (attachBefore) {
         Attach_Before_This(pThis, request, queue);
     } else {
@@ -139,12 +139,13 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
 }
 */
 
-Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, MotorDirection mDirection, bool mElevMoving) {
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, MotorDirection mDirection, bool mElevMoving, int *mFloorLastCompletedRequest) {
     if (request->floor > mCurrentFloor) {
         mDirection = DIRN_UP;
     } else if (request->floor < mCurrentFloor) {
         mDirection = DIRN_DOWN;
     }
+    // mDirection is the direction the elevator would have if it were to complete the coming request immediately
     switch (mDirection)
     {
     case DIRN_DOWN:
@@ -152,7 +153,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         {
             case BUTTON_CAB:
                 // WORKING BUT NOW THE FIRST ONE IS TOTALLY IGNORED SINCE YOU START MOVING IMMEDIATELY
-                if (mElevMoving && queue->numberOfNodes > 2 /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */) {
+                if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) { /* && mCurrentFloor +- 0.5 (problemet er naar mellom floors ryker queue systemet) */
                     //*attachBefore = false;
                      printf("------------------------------DOWN, CAB, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -177,7 +178,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
                 break;
             case BUTTON_HALL_UP:
-                if (mElevMoving && queue->numberOfNodes > 2) {
+                if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, UP, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -202,7 +203,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
                 return queue->tail;
                 break;
             case BUTTON_HALL_DOWN:
-                if (mElevMoving && queue->numberOfNodes > 2) {
+                if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
                     //*attachBefore = false;
                      printf("------------------------------DOWN, DOWN, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -234,7 +235,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
         switch (request->direction)
     {
         case BUTTON_CAB:
-            if (mElevMoving && queue->numberOfNodes > 2) {
+            if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
                     //*attachBefore = false;
                      printf("------------------------------UP, CAB, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -259,7 +260,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             return queue->tail;
             break;
         case BUTTON_HALL_UP:
-            if (mElevMoving && queue->numberOfNodes > 2) {
+            if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
                 //*attachBefore = false;
                 printf("------------------------------UP, UP, BETWEEN---------------------------------\n\n");
                 for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -284,7 +285,7 @@ Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrent
             return queue->tail;
             break;
         case BUTTON_HALL_DOWN:
-            if (mElevMoving && queue->numberOfNodes > 2) {
+            if (mElevMoving && queue->numberOfNodes > 2 && request->floor == *mFloorLastCompletedRequest) {
                     //*attachBefore = false;
                     printf("------------------------------UP, DOWN, BETWEEN---------------------------------\n\n");
                     for (Request *it = queue->head->pNextRequest->pNextRequest; it != queue->tail; it = it->pNextRequest) {
@@ -386,13 +387,14 @@ void Delete_From_Queue(Request *request, Queue *queue){
 // at the same time someone at floor 2 will go down, but someone at floor 4 will
 // also go down. The best behaviour here is to prioritize the cabin, then since you have arrived at 
 // the floor go down for the person in floor 2, and then go up to 4
-void Automatic_Deletion_From_Queue(Queue *queue, double mCurrentFloor, Door door, Elevatorpanel *panel){ // should this go on forever itself as well, because the while loop in main is going forever
+void Automatic_Deletion_From_Queue(Queue *queue, double mCurrentFloor, Door door, Elevatorpanel *panel, int *mFloorLastCompletedRequest){
     if (door.isOpen) {
         for (Request *iteratorNode = queue->head->pNextRequest; iteratorNode != NULL; iteratorNode = iteratorNode->pNextRequest) {
             if (iteratorNode->pPrevRequest == queue->head) {
                 continue;
             }
             if (iteratorNode->pPrevRequest->floor == mCurrentFloor) {
+                *mFloorLastCompletedRequest = iteratorNode->pPrevRequest->floor;
                 panel->PanelButtonState[iteratorNode->pPrevRequest->floor][iteratorNode->pPrevRequest->direction] = 0;
                 Turn_Off_Elevator_Button_Lamp(iteratorNode->pPrevRequest->floor, iteratorNode->pPrevRequest->direction);
                 Delete_From_Queue(iteratorNode->pPrevRequest, queue);
