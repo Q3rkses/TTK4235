@@ -100,10 +100,13 @@ int main(){
                 mTime = get_current_time();
                 mTimerCounter++;
             }
+        }
 
             /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
         
         if (get_elapsed_time(mTime) > 2 && door.isOpen == true){
+
+            if(panel.PanelButtonState[mCurrentFloor][0] == true || panel.PanelButtonState[mCurrentFloor][1] == true || panel.PanelButtonState[mCurrentFloor][2] == true){
 
                 for(int i = 0; i < 3; i++){
                 Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel);
@@ -115,7 +118,6 @@ int main(){
             }
             mTimerCounter = 0;
         }
-    }
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         
