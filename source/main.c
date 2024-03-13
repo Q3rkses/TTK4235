@@ -103,7 +103,9 @@ int main(){
             }
 
             /**------------------------- DELETING REQUEST AFTER 3 SECONDS HAVE PASSED -------------------------*/
-            if (get_elapsed_time(mTime) > 2){
+        
+        if (get_elapsed_time(mTime) > 2 && door.isOpen == true){
+
                 for(int i = 0; i < 3; i++){
                     Automatic_Deletion_From_Queue(&mQueue, mCurrentFloor, door, &panel, mFloorLastCompletedRequest);
                 }
@@ -113,6 +115,12 @@ int main(){
                 }
                 mTimerCounter = 0;
             }
+            
+            if (!elevio_obstruction()){
+                Door_Close(&door);
+                superstop = false;
+            }
+            mTimerCounter = 0;
         }
 
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
@@ -225,7 +233,6 @@ int main(){
         }
         
         nanosleep(&(struct timespec){0, 50*100*100}, NULL);
-    }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
     Empty_Queue(&mQueue, &panel);
