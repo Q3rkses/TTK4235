@@ -24,7 +24,7 @@ typedef struct Queue {
 
 Queue Queue_Init(Request *head, Request *tail);
 
-void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, MotorDirection mDirection, bool mElevMoving);
+void Attach_Request_To_Queue(Request *request, Queue *queue, double mCurrentFloor, MotorDirection mDirection, bool mElevMoving, int *mFloorLastComletedRequest);
 
 bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
 
@@ -33,7 +33,7 @@ bool Request_Already_Exists_In_Queue(Request *request, Queue *queue);
  * @param attachBefore, attachBefore can be true or false, it does not matter
  * @return Directly returns a request pointer and changes attachBefore pointer accordingly to ensure correct assertion of request to queue
 */
-Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, MotorDirection mDirection, bool mElevMoving);
+Request* Where_To_Attach_Request(Request *request, Queue *queue, double mCurrentFloor, bool *attachBefore, MotorDirection mDirection, bool mElevMoving, int *mFloorLastComletedRequest);
 
 void Attach_Before_This(Request *this, Request *requestToAttach, Queue *queue);
 
