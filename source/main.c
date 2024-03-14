@@ -137,7 +137,7 @@ int main(){
                     elevio_motorDirection(mDirection);
                     mElevMoving = true;
                 }
-            }
+        }
 
         /**------------------------- STOP BUTTON FUNCTIONALITY -------------------------*/
         while(elevio_stopButton()){
@@ -236,6 +236,8 @@ int main(){
         }
         
         nanosleep(&(struct timespec){0, 50*100*100}, NULL);
+
+    }
 
     printf("------------------------- ELEVATOR STOP -------------------------\n");
     Empty_Queue(&mQueue, &panel);
