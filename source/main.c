@@ -33,7 +33,8 @@ int main(){
     time_t mTime = get_current_time();
     bool superstop = false;
     bool mElevMoving = false;
-    int *mFloorLastCompletedRequest;
+    int nothingVarToInit = 0;
+    int *mFloorLastCompletedRequest = &nothingVarToInit;
 
     /**COUNTERS AND TEMP VALUES*/
     int mTimerCounter = 0;
