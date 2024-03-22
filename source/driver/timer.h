@@ -13,4 +13,9 @@
  */
 time_t get_current_time();
 
+/**
+ * @brief Get the elapsed time since the timer was started
+ * @param start_time 
+ * @return time_t 
+ */
 time_t get_elapsed_time(time_t start_time);

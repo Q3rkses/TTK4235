@@ -118,7 +118,7 @@ int main(){
             }
             mTimerCounter = 0;
         }
-
+    }
         /**------------------------- MOVE TO FULLFULL REQUESTS -------------------------*/
         
         /**Move_To_Fulfill_Requests(&mQueue, &mDirection, mTempFloor, mCurrentFloor, &superstop, &mBetweenCounter);*/

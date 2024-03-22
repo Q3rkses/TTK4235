@@ -12,7 +12,8 @@
  * @param floor, the floor of the request.
  * @param direction, DIRN_UP if upward request, DIRN_DOWN if downward request, 0 or DIRN_STOP if a cabin request
  * @param off, True if someone is getting off at current floor.
- * @param pNextRequest, next request in queue
+ * @param pNextRequest, pointer to the next request in queue
+ * @param pPrevRequest, pointer to the previous request in queue
 */
 typedef struct Request {
     struct Request *pNextRequest;

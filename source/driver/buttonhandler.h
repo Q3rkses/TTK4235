@@ -81,6 +81,13 @@ void Turn_Off_Elevator_Button_Lamp(int floor, ButtonType type);
 
 Request* Update_Button_Press(Elevatorpanel *panel, int *floor, ButtonType *btntype);
 
+/**
+ * @brief Function that initializes the buttonhandler, will be used to keep track of the stop and obstruction buttons.
+*/
 void Buttonhandler_init(Buttonhandler *buttonhandler);
 
+/**
+ * @brief Evaluates the current floor of the elevator, as a double, will print n at a specific floor n+0.5 if moving up between floors, and n-0.5 if moving down between floors.
+ * @return double
+*/
 double Evaluate_Current_Floor(MotorDirection direction, int current_floor);
